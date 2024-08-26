@@ -85,7 +85,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .expiration(new Date(System.currentTimeMillis()+3600000))
                 .compact();
         //Se agrega el token al header de la respuesta
-        response.addHeader(HEADER_AUTHORIZATION,PREFIX_TOKEN+jwt);
+        response.addHeader(HEADER_AUTHORIZATION,PREFIX_TOKEN + jwt);
         //Se crea un objeto body con el token, el username y un mensaje
         Map<String,String>body=new HashMap<>();
         body.put("token",jwt);
