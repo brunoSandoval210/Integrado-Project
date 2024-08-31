@@ -18,77 +18,79 @@ export class AuthService {
 
   constructor(private http:HttpClient) { }
 
-  //Se agrega la ruta para el login
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined';
+  }
+
   loginUser({username,password}:any):Observable<any>{
     return this.http.post<any>(this.url,{username,password});
   }
 
-  //Se agrega el usuario para guardar el usuario en el localStorage
   set user(user:any){
-    this._user=user;
-    sessionStorage.setItem('login',JSON.stringify(user));
+    this._user = user;
+    if (this.isBrowser()) {
+      sessionStorage.setItem('login', JSON.stringify(user));
+    }
   }
 
-  //Se agrega el usuario para obtener el token del localStorage
   get user(){
-    if(this._user.isAuth){
+    if (this._user.isAuth) {
       return this._user;
-    } else if(sessionStorage.getItem('login') != null){
-      this._user=JSON.parse(sessionStorage.getItem('login')||'');
+    } else if (this.isBrowser() && sessionStorage.getItem('login') != null) {
+      this._user = JSON.parse(sessionStorage.getItem('login') || '{}');
       return this._user;
     }
     return this._user;
   }
-
-  //Se agrega el método para guardar el token en el localStorage
+  
   set token(token:string){
-    this._token=token;
-    sessionStorage.setItem('token',token);
+    this._token = token;
+    if (this.isBrowser()) {
+      sessionStorage.setItem('token', token);
+    }
   }
 
-  //Se agrega el método para obtener el token del localStorage
   get token(){
-    if(this._token != undefined){
+    if (this._token !== undefined) {
       return this._token;
-    } else if(sessionStorage.getItem('token') != null){
-      this._token=sessionStorage.getItem('token')||'';
+    } else if (this.isBrowser() && sessionStorage.getItem('token') != null) {
+      this._token = sessionStorage.getItem('token') || '';
       return this._token;
     }
     return this._token!;
   }
 
-  //Se agrega el método para obtener el payload del token
   getPayload(token:string){
-    if(token != undefined){
+    if(token !== undefined){
       return JSON.parse(atob(token.split(".")[1]));
-    } 
+    }
     return null;
   }
 
-  //Se agrega el método para validar si el usuario es administrador
   isAdmin(){
     return this.user.isAdmin;
   }
 
-  //Se agrega el método para validar si el usuario es doctor
   isDoctor(){
     return this.user.isDoctor;
   }
 
-  //Se agrega el método para validar si el usuario está autenticado
   isAuthenticated(){
     return this.user.isAuth;
   }
 
-  //Se agrega el método para cerrar sesión
   logout(){
-    this._token=undefined;
-    this._user={
-      isAuth:false,
-      isAdmin:false,
-      user:undefined
+    this._token = undefined;
+    this._user = {
+      isAuth: false,
+      isAdmin: false,
+      isDoctor: false,
+      user: undefined
     };
-    sessionStorage.removeItem('login');
-    sessionStorage.removeItem('token');
+    if (this.isBrowser()) {
+      sessionStorage.removeItem('login');
+      sessionStorage.removeItem('token');
+    }
   }
+
 }

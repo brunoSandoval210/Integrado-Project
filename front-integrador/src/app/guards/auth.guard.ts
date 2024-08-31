@@ -5,15 +5,13 @@ import { AuthService } from "../services/auth.service";
 export const authGuard:CanActivateFn=(route,state)=>{
     const service=inject(AuthService);
     const router=inject(Router);
-    if(service.isAuthenticated){
-        if(service.isAuthenticated()){
-            if(isTokenExpired()){
-                service.logout();
-                return false;
-            }
+    if(service.isAuthenticated()){
+        if(isTokenExpired()){
+            service.logout();
+            return false;
         }
         if(!service.isAdmin()){
-            router.navigate(['/home']);
+            router.navigate(['/forbidden']);
             return false;
         }
         return true;

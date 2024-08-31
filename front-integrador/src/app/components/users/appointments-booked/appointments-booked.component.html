@@ -1,0 +1,57 @@
+<div class="bg-gray-300 flex flex-col items-center py-20 height">
+    <div class="flex lg:flex-row flex-col lg:justify-around px-10 py-10 gap-3 w-full">
+        <filter-doctor />
+        <filter-date/>
+        <button class="
+        bg-blue-600 
+        border-blue-600 
+        rounded-md
+        py-2
+        px-4
+        text-white">Aplicar filtro</button>
+    </div>
+    <table class="lg:w-10/12 w-11/12">
+        <thead class="bg-blue-600 text-white h-16">
+            <tr>
+                <th class="rounded-tl-lg p-3">Fecha</th>
+                <th>Doctor</th>
+                <th>Especialidad</th>
+                <th>Ver comentario</th>
+                <th class="rounded-tr-lg p-3">Descargar cita</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white text-center">
+            <tr class="">
+                <td class="">12/12/2021</td>
+                <td class="">Dr. Juan Perez</td>
+                <td class="">Cardiología</td>
+                <td class="">
+                    <button class="
+                    bg-green-600 
+                    border-green-600 
+                    rounded-md
+                    py-2
+                    px-4
+                    text-white">Ver comentario</button>
+                </td>
+                <td class="">
+                    <button class="
+                    bg-red-600 
+                    border-red-600 
+                    rounded-md
+                    py-2
+                    px-4
+                    text-white">Descargar cita</button>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot class="bg-white">
+            <tr>
+                <td colspan="5" class="text-center">
+                    <button class="bg-blue-600 border-blue-600 rounded-md py-2 px-4 text-white mx-10 w-28">Atras</button>
+                    <button class="bg-blue-600 border-blue-600 rounded-md py-2 px-4 text-white mx-10 w-28">Siguiente</button>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

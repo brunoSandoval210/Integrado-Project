@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { NavbarUserComponent } from '../navbar-user/navbar-user.component';
 import { SlideUserComponent } from '../slide-user/slide-user.component';
-import { Router, RouterModule } from '@angular/router';
 import { FooterUserComponent } from '../footer-user/footer-user.component';
-import { User } from '../../../model/user';
 import { SharingDataService } from '../../../services/sharing-data.service';
 import { AuthService } from '../../../services/auth.service';
-import { error } from 'console';
+import { User } from '../../../model/user';
 
 @Component({
   selector: 'app-skeletor-user',
@@ -49,11 +48,11 @@ export class SkeletorUserComponent implements OnInit {
           }
           this.authService.token = token;
           this.authService.user = login;
-          this.router.navigate(['/home']);
+          this.router.navigate(['/mis-citas']);
         },
         error: error => {
           if (error.status == 401) {
-            console.log(error.error)
+            console.log(error.error.message)
           } else {
             throw error;
           }

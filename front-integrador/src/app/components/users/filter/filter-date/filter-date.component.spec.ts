@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SkeletorComponent } from './skeletor.component';
+import { FilterDateComponent } from './filter-date.component';
 
-describe('SkeletorComponent', () => {
-  let component: SkeletorComponent;
-  let fixture: ComponentFixture<SkeletorComponent>;
+describe('FilterDateComponent', () => {
+  let component: FilterDateComponent;
+  let fixture: ComponentFixture<FilterDateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SkeletorComponent]
+      imports: [FilterDateComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SkeletorComponent);
+    fixture = TestBed.createComponent(FilterDateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
