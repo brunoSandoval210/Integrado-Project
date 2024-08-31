@@ -24,6 +24,7 @@ public class User implements IUser {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     @Size(max = 45)
@@ -52,27 +53,29 @@ public class User implements IUser {
     private String dni;
 
     //Relacion de muchos a muchos
-    @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
-    @ManyToMany(fetch=FetchType.LAZY)
-    //Tabla intermedia
-    @JoinTable(
-            name="usuario_rol",
-            joinColumns = {@JoinColumn(name="usuario_id")},
-            inverseJoinColumns = {@JoinColumn(name="rol_id")},
-            uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id","rol_id"})}
-    )
-    private List<Role> roles;
+//    @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
+//    @ManyToMany(fetch=FetchType.LAZY)
+//    //Tabla intermedia
+//    @JoinTable(
+//            name="usuario_rol",
+//            joinColumns = {@JoinColumn(name="usuario_id")},
+//            inverseJoinColumns = {@JoinColumn(name="rol_id")},
+//            uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id","rol_id"})}
+//    )
+//    private List<Role> roles;
 
-    //Atributo que no se mapea a la base de datos
+    @ManyToOne()
+    @JsonIgnoreProperties({"users"})
+    @JoinColumn(name = "rol_id")
+    private Role role;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String username;
     @Transient
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean admin;
 
-    //Atributo que no se mapea a la base de datos
     @Transient
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private boolean doctor;
-    //Atributo que no se mapea a la base de datos
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String username;
 }

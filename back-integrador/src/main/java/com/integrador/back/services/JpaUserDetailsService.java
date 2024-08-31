@@ -33,10 +33,12 @@ public class JpaUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(String.format("username %s no existe en el sistema",username));
         }
         User user=optionalUser.orElseThrow();
-        List<GrantedAuthority> authorities=user.getRoles()
-                .stream()
-                .map(role->new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
+//        List<GrantedAuthority> authorities=user.getRoles()
+//                .stream()
+//                .map(role->new SimpleGrantedAuthority(role.getName()))
+//                .collect(Collectors.toList());
+        GrantedAuthority authority=new SimpleGrantedAuthority(user.getRole().getName());
+        List<GrantedAuthority> authorities=List.of(authority);
 
         return new org.springframework.security.core.userdetails.User(username,
                 user.getPassword(),

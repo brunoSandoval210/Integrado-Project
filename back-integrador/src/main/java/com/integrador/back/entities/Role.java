@@ -1,9 +1,12 @@
 package com.integrador.back.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -15,7 +18,13 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class Role {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    Long id;
+    @Column(name = "rol_id")
+    private Long id;
+
     @Column(name = "nombre")
-    String name;
+    private String name;
+
+    @OneToMany(mappedBy = "role")
+    @JsonIgnoreProperties({"role"})
+    private List<User> users;
 }
