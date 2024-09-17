@@ -1,5 +1,6 @@
 package com.integrador.back.controllers;
 
+import com.integrador.back.dtos.UserCreateDTO;
 import com.integrador.back.dtos.UserUpdateDTO;
 import com.integrador.back.entities.User;
 import com.integrador.back.services.UserService;
@@ -34,6 +35,12 @@ public class UserController {
         return userService.findAll(pageable);
     }
 
+    @GetMapping("users/{roleId}/{page}")
+    public Page<User> listPageableClient(@PathVariable Long roleId,@PathVariable Integer page){
+        Pageable pageable= PageRequest.of(page,10);
+        return userService.findByRolId(roleId,pageable);
+    }
+
     @GetMapping("user/{id}")
     public ResponseEntity<?> show(@PathVariable Long id){
         Optional<User> user=userService.findById(id);
@@ -47,7 +54,7 @@ public class UserController {
     }
 
     @PostMapping("user")
-    public ResponseEntity<?> create(@Valid @RequestBody User user, BindingResult result) {
+    public ResponseEntity<?> create(@Valid @RequestBody UserCreateDTO user, BindingResult result) {
         if (result.hasErrors()) {
             return validation(result);
         }

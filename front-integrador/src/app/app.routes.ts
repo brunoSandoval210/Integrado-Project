@@ -5,6 +5,7 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { authGuard } from './guards/auth.guard';
 import { AppointmentsBookedComponent } from './components/users/appointments-booked/appointments-booked.component';
 import { ForbiddenComponent } from './components/auth/forbidden/forbidden.component';
+import { RegisterComponent } from './components/auth/register/register.component';
 
 export const routes: Routes = [
     {
@@ -18,7 +19,8 @@ export const routes: Routes = [
         children:[
             {path:'home',component:HomeComponent},
             {path:'login',component:LoginComponent},
-            {path:'mis-citas',component:AppointmentsBookedComponent,canActivate:[authGuard]}
+            {path:'mis-citas',component:AppointmentsBookedComponent},
+            {path:'register',component:RegisterComponent}
             // {path:'client',component:HomeClientComponent,canActivate:[authGuard]}
         ]
     },

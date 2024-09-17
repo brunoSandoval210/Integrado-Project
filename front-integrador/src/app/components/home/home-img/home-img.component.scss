@@ -1,0 +1,31 @@
+.home-img-container {
+    position: relative; /* Posicionamiento relativo para los hijos absolutos */
+}
+.home-img-container img {
+    display: block; /* Elimina el espacio extra que se genera por ser un elemento inline */
+    max-width: 100%; /* Imagenes responsivas */
+    height: auto; /* Imagenes responsivas */
+}
+.text-overlay {
+    position: absolute;
+    top: 32px; /* Ajusta según necesidades */
+    left: 50%;
+    transform: translateX(-50%); /* Centra el texto horizontalmente */
+    width: 90%; /* O el ancho que prefieras */
+    background-color: rgba(255, 255, 255, 0.5); /* Fondo blanco semitransparente */
+    color: black;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center; /* Centra el texto dentro del contenedor */
+}
+
+@media screen and (min-width: 430px) and (max-width: 500px) {
+   .position-text{
+        top: 13rem;
+   }
+}
+@media screen and (min-width: 500px) and (max-width: 640px) {
+   .position-text{
+        top: 17rem;
+   }
+}

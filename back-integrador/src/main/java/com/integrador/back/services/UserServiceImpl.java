@@ -1,6 +1,7 @@
 package com.integrador.back.services;
 
 import com.integrador.back.dtos.IUser;
+import com.integrador.back.dtos.UserCreateDTO;
 import com.integrador.back.dtos.UserUpdateDTO;
 import com.integrador.back.entities.Role;
 import com.integrador.back.entities.User;
@@ -48,10 +49,26 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     @Override
-    public User save(User user) {
-        user.setRole(getRole(user));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+    public User save(UserCreateDTO user) {
+        String password=passwordEncoder.encode(user.getPassword());
+        User newUser = new User();
+        mapDtoToUser(user, newUser);
+        newUser.setPassword(password);
+        return userRepository.save(newUser);
+    }
+
+    @Transactional
+    @Override
+    public Optional<User> update(UserUpdateDTO user, Long id) {
+        Optional<User> userOptional=userRepository.findById(id);
+        if(userOptional.isPresent()){
+            User userUpdate=userOptional.get();
+            mapDtoToUser(user,userUpdate);
+            //se retorna el objeto userUpdate
+            return Optional.of(userRepository.save(userUpdate));
+        }
+        //se retorna un objeto vacio
+        return Optional.empty();
     }
 
     @Transactional
@@ -60,23 +77,20 @@ public class UserServiceImpl implements UserService{
         userRepository.deleteById(id);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
-    public Optional<User> update(UserUpdateDTO user, Long id) {
-        Optional<User> userOptional=userRepository.findById(id);
-        if(userOptional.isPresent()){
-            //se inicializa el objeto userUpdate con el objeto userOptional
-            User userUpdate=userOptional.get();
-            userUpdate.setName(user.getName());
-            userUpdate.setLastname(user.getLastname());
-            userUpdate.setEmail(user.getEmail());
-            userUpdate.setDni(user.getDni());
-            userUpdate.setRole(getRole(user));
-            //se retorna el objeto userUpdate
-            return Optional.of(userRepository.save(userUpdate));
-        }
-        //se retorna un objeto vacio
-        return Optional.empty();
+    public Page<User> findByRolId(Long id, Pageable pageable) {
+        return userRepository.findByRole_Id(id,pageable);
+    }
+
+    private void mapDtoToUser(IUser userDTO, User user) {
+        user.setName(userDTO.getName());
+        user.setLastname(userDTO.getLastname());
+        user.setEmail(userDTO.getEmail());
+        user.setDni(userDTO.getDni());
+        user.setNumberTuition(userDTO.getNumberTuition());
+        user.setSpecializations(userDTO.getSpecializations());
+        user.setRole(getRole(userDTO));
     }
 
     private Role getRole(IUser user) {

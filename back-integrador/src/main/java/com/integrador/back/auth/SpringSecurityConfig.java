@@ -49,7 +49,10 @@ public class SpringSecurityConfig {
         return httpSecurity.authorizeHttpRequests(authorizeRequests->
                 authorizeRequests
                 .requestMatchers(HttpMethod.GET,"integrador/users/{page}").permitAll()
-                .requestMatchers(HttpMethod.POST,"integrador/user").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"integrador/users/{roleId}/{page}").permitAll()
+//                .requestMatchers(HttpMethod.POST,"integrador/user").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST,"integrador/user").permitAll()
+                .requestMatchers(HttpMethod.PUT,"integrador/user/{id}").permitAll()
                 .anyRequest().authenticated())
                 .cors(cors->cors.configurationSource(corsConfigurationSource()))
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))

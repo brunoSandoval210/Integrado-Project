@@ -6,6 +6,7 @@ import { FooterUserComponent } from '../footer-user/footer-user.component';
 import { SharingDataService } from '../../../services/sharing-data.service';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../model/user';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-skeletor-user',
@@ -24,6 +25,7 @@ export class SkeletorUserComponent implements OnInit {
   constructor(
     private sharingDataService: SharingDataService,
     private authService: AuthService,
+    private userService: UserService,
     private router: Router
   ) {
 
@@ -31,6 +33,7 @@ export class SkeletorUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.handlerLogin();
+    this.registerUser();
   }
 
   handlerLogin() {
@@ -49,6 +52,23 @@ export class SkeletorUserComponent implements OnInit {
           this.authService.token = token;
           this.authService.user = login;
           this.router.navigate(['/mis-citas']);
+        },
+        error: error => {
+          if (error.status == 401) {
+            console.log(error.error.message)
+          } else {
+            throw error;
+          }
+        }
+      })
+    }
+    )
+  }
+  registerUser() {
+    this.sharingDataService.registerUserEventEmitter.subscribe(({ name, lastname, dni, email, password }) => {
+      this.userService.createUser({ name, lastname, dni, email, password }).subscribe({
+        next: response => {
+          console.log(response);
         },
         error: error => {
           if (error.status == 401) {
