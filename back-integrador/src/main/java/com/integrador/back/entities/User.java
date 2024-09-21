@@ -82,14 +82,14 @@ public class User{
     @JsonIgnoreProperties({"user"})
     private List<Appointment> appointments;
 
-    @Column(name = "fecha_creacion")
-    private Timestamp dateCreation;
-
-    @Column(name = "fecha_actualizacion")
-    private Timestamp dateUpdate;
-
-    @Column(name = "status")
-    private Integer status;
+//    @Column(name = "fecha_creacion")
+//    private Timestamp dateCreation;
+//
+//    @Column(name = "fecha_actualizacion")
+//    private Timestamp dateUpdate;
+//
+//    @Column(name = "status")
+//    private Integer status;
 
     public User(String name, String lastname, String email, String dni, String password, String numberTuition, List<Specialization> specializations, Role role) {
     }

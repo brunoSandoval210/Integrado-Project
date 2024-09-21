@@ -5,6 +5,7 @@ import com.integrador.back.dtos.UserUpdateDTO;
 import com.integrador.back.entities.User;
 import com.integrador.back.services.UserService;
 import jakarta.validation.Valid;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,15 +31,25 @@ public class UserController {
     }
 
     @GetMapping("users/{page}")
-    public Page<User> listPageable(@PathVariable Integer page){
+    public ResponseEntity<?> listPageable(@PathVariable Integer page){
         Pageable pageable= PageRequest.of(page,10);
-        return userService.findAll(pageable);
+        try{
+            Page<User> users=userService.findAll(pageable);
+            return ResponseEntity.ok(users);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", e.getMessage()));
+        }
     }
 
     @GetMapping("users/{roleId}/{page}")
-    public Page<User> listPageableClient(@PathVariable Long roleId,@PathVariable Integer page){
+    public ResponseEntity<?> listPageableClient(@PathVariable Long roleId,@PathVariable Integer page){
         Pageable pageable= PageRequest.of(page,10);
-        return userService.findByRolId(roleId,pageable);
+        try{
+            Page<User> users=userService.findByRolId(roleId,pageable);
+            return ResponseEntity.ok(users);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", e.getMessage()));
+        }
     }
 
     @GetMapping("user/{id}")
@@ -48,7 +59,6 @@ public class UserController {
             //Se retorna un 200 porque se encontro el usuario
             return ResponseEntity.status(HttpStatus.OK).body(user.orElseThrow());
         }
-        //
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Collections.singletonMap("error","El usuario no se encontro por el id: "+id));
     }
@@ -58,8 +68,13 @@ public class UserController {
         if (result.hasErrors()) {
             return validation(result);
         }
-        //Se retorna un 201 porque se creo el usuario
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(user));
+        try {
+            User newUser = userService.save(user);
+            //Se retorna un 201 porque se creo el usuario
+            return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
     }
 
     @PutMapping("user/{id}")

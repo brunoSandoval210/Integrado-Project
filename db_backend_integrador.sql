@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-09-2024 a las 23:24:23
+-- Tiempo de generación: 21-09-2024 a las 21:35:17
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -37,7 +37,6 @@ CREATE TABLE `cita` (
   `fecha_actualizacion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `status` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 
 -- --------------------------------------------------------
 
@@ -84,6 +83,23 @@ CREATE TABLE `especializacion` (
   `status` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `especializacion`
+--
+
+INSERT INTO `especializacion` (`especializacion_id`, `nombre`, `fecha_creacion`, `fecha_actualizacion`, `status`) VALUES
+(1, 'Cardiología', '2024-09-19 00:50:20', '2024-09-19 00:50:20', 1),
+(2, 'Dermatología', '2024-09-19 00:50:20', '2024-09-19 00:50:20', 1),
+(3, 'Gastroenterología', '2024-09-19 00:50:20', '2024-09-19 00:50:20', 1),
+(4, 'Ginegología y Obstetricia', '2024-09-19 00:50:20', '2024-09-19 00:50:20', 1),
+(5, 'Hematología', '2024-09-19 00:50:20', '2024-09-19 00:50:20', 1),
+(6, 'Oftalmología', '2024-09-19 00:50:20', '2024-09-19 00:50:20', 1),
+(7, 'Ortopedia', '2024-09-19 00:50:20', '2024-09-19 00:50:20', 1),
+(8, 'Otorrinolaringología', '2024-09-19 00:50:20', '2024-09-19 00:50:20', 1),
+(9, 'Pediatría', '2024-09-19 00:50:20', '2024-09-19 00:50:20', 1),
+(10, 'Psiquiatría General', '2024-09-19 00:50:20', '2024-09-19 00:50:20', 1),
+(11, 'Medicina General', '2024-09-19 00:50:20', '2024-09-19 00:50:20', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -98,7 +114,7 @@ CREATE TABLE `historial_medico` (
   `status` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `horario`
@@ -106,8 +122,10 @@ CREATE TABLE `historial_medico` (
 
 CREATE TABLE `horario` (
   `horario_id` int(11) NOT NULL,
-  `fecha_inicio` datetime NOT NULL,
-  `fecha_fin` datetime NOT NULL,
+  `fecha_inicio` date NOT NULL,
+  `fecha_fin` date NOT NULL,
+  `hora_inicio` time DEFAULT NULL,
+  `hora_fin` time DEFAULT NULL,
   `usuario_id` int(11) DEFAULT NULL,
   `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
   `fecha_actualizacion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -134,10 +152,10 @@ CREATE TABLE `rol` (
 -- Volcado de datos para la tabla `rol`
 --
 
-INSERT INTO `rol` (`rol_id`, `nombre`) VALUES
-(1, 'ROLE_DOCTOR'),
-(2, 'ROLE_USER'),
-(3, 'ROLE_ADMIN');
+INSERT INTO `rol` (`rol_id`, `nombre`, `fecha_creacion`, `fecha_actualizacion`, `status`) VALUES
+(1, 'ROLE_DOCTOR', '2024-09-16 19:42:54', '2024-09-16 19:42:54', 1),
+(2, 'ROLE_USER', '2024-09-16 19:42:54', '2024-09-17 00:46:37', 1),
+(3, 'ROLE_ADMIN', '2024-09-17 00:46:37', '2024-09-17 00:46:37', 1);
 
 -- --------------------------------------------------------
 
@@ -160,9 +178,8 @@ CREATE TABLE `usuario` (
   `status` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `usuario`
 
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `usuario_especializacion`
@@ -175,6 +192,17 @@ CREATE TABLE `usuario_especializacion` (
   `fecha_actualizacion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `status` int(11) DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuario_especializacion`
+--
+
+INSERT INTO `usuario_especializacion` (`usuario_id`, `especializacion_id`, `fecha_creacion`, `fecha_actualizacion`, `status`) VALUES
+(24, 2, '2024-09-19 00:52:21', '2024-09-19 00:52:21', 1),
+(25, 1, '2024-09-19 00:52:21', '2024-09-19 00:52:21', 1),
+(26, 3, '2024-09-19 00:52:21', '2024-09-19 00:52:21', 1),
+(27, 4, '2024-09-19 00:52:21', '2024-09-19 00:52:21', 1),
+(28, 5, '2024-09-19 00:52:21', '2024-09-19 00:52:21', 1);
 
 --
 -- Índices para tablas volcadas
@@ -270,7 +298,7 @@ ALTER TABLE `documentos_usuario`
 -- AUTO_INCREMENT de la tabla `especializacion`
 --
 ALTER TABLE `especializacion`
-  MODIFY `especializacion_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `especializacion_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `historial_medico`
@@ -282,7 +310,7 @@ ALTER TABLE `historial_medico`
 -- AUTO_INCREMENT de la tabla `horario`
 --
 ALTER TABLE `horario`
-  MODIFY `horario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `horario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`
@@ -294,7 +322,7 @@ ALTER TABLE `rol`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `usuario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `usuario_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- Restricciones para tablas volcadas

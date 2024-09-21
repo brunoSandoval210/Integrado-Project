@@ -7,6 +7,7 @@ export class SharingDataService {
 
   private _handlerLoginEventEmitter=new EventEmitter();
   private _registerUserEventEmitter=new EventEmitter();
+  private _errorRegisterEventEmitter=new EventEmitter();
 
   constructor() { }
 
@@ -16,5 +17,9 @@ export class SharingDataService {
 
   get registerUserEventEmitter(){
     return this._registerUserEventEmitter;
+  }
+
+  get errorRegisterEventEmitter(){
+    return this._errorRegisterEventEmitter;
   }
 }

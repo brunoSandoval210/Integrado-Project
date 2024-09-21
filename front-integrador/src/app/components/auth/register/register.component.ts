@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { User } from '../../../model/user';
 import { SharingDataService } from '../../../services/sharing-data.service';
-import { last } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -13,18 +12,14 @@ import { last } from 'rxjs';
 })
 export class RegisterComponent {
   user:User;
-
+  errors:any = {};
   constructor(private sharingDataService:SharingDataService) {
     this.user = new User();
   }
 
-  onRegister() {
-    this.sharingDataService.registerUserEventEmitter.emit({
-      name:this.user.name,
-      lastname:this.user.lastname,
-      dni:this.user.dni,
-      email:this.user.email,
-      password:this.user.password
-    });
+  onRegister(userForm:NgForm) {
+   
+      this.sharingDataService.registerUserEventEmitter.emit(this.user);
+    
   }
 }

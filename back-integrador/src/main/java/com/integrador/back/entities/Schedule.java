@@ -5,9 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.LocalTime;
+import java.util.Date;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -22,11 +22,21 @@ public class Schedule {
     @Column(name = "horario_id")
     private Long id;
 
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "fecha_inicio")
-    private LocalDateTime dateStart;
+    private Date dateStart;
 
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "fecha_fin")
-    private LocalDateTime dateEnd;
+    private Date dateEnd;
+
+    @Column(name = "hora_inicio")
+    private LocalTime hourStart;
+
+    @Column(name = "hora_fin")
+    private LocalTime hourEnd;
 
     @ManyToOne
     @JsonIgnoreProperties({"schedules"})
@@ -36,14 +46,5 @@ public class Schedule {
     @OneToOne(mappedBy = "schedule")
     @JsonIgnoreProperties({"schedule"})
     private Appointment appointment;
-
-    @Column(name = "fecha_creacion")
-    private Timestamp dateCreation;
-
-    @Column(name = "fecha_actualizacion")
-    private Timestamp dateUpdate;
-
-    @Column(name = "status")
-    private Integer status;
 
 }

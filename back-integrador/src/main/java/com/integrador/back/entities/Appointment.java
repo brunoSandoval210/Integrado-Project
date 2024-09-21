@@ -37,12 +37,4 @@ public class Appointment {
     @JsonIgnoreProperties({"appointment"})
     private Schedule schedule;
 
-    @Column(name = "fecha_creacion")
-    private Timestamp dateCreation;
-
-    @Column(name = "fecha_actualizacion")
-    private Timestamp dateUpdate;
-
-    @Column(name = "status")
-    private Integer status;
 }

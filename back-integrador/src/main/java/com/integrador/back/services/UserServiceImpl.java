@@ -38,6 +38,9 @@ public class UserServiceImpl implements UserService{
     @Transactional(readOnly = true)
     @Override
     public Page<User> findAll(Pageable pageable) {
+        if(this.userRepository.findAll().isEmpty()){
+            throw new IllegalArgumentException("No hay usuarios registrados");
+        }
         return this.userRepository.findAll(pageable);
     }
 
@@ -50,6 +53,12 @@ public class UserServiceImpl implements UserService{
     @Transactional
     @Override
     public User save(UserCreateDTO user) {
+        if(userRepository.existsByDni(user.getDni())){
+            throw new IllegalArgumentException("El DNI ya esta registrado");
+        }
+        if(userRepository.existsByEmail(user.getEmail())){
+            throw new IllegalArgumentException("El email ya esta registrado");
+        }
         String password=passwordEncoder.encode(user.getPassword());
         User newUser = new User();
         mapDtoToUser(user, newUser);
@@ -62,6 +71,7 @@ public class UserServiceImpl implements UserService{
     public Optional<User> update(UserUpdateDTO user, Long id) {
         Optional<User> userOptional=userRepository.findById(id);
         if(userOptional.isPresent()){
+            //se obtiene el objeto user
             User userUpdate=userOptional.get();
             mapDtoToUser(user,userUpdate);
             //se retorna el objeto userUpdate
@@ -74,12 +84,15 @@ public class UserServiceImpl implements UserService{
     @Transactional
     @Override
     public void deleteById(Long id) {
-        userRepository.deleteById(id);
+//        userRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public Page<User> findByRolId(Long id, Pageable pageable) {
+        if(userRepository.findByRole_Id(id,pageable).isEmpty()){
+            throw new IllegalArgumentException("No hay usuarios registrados con ese rol");
+        }
         return userRepository.findByRole_Id(id,pageable);
     }
 

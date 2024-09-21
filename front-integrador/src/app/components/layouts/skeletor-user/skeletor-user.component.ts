@@ -7,6 +7,7 @@ import { SharingDataService } from '../../../services/sharing-data.service';
 import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../model/user';
 import { UserService } from '../../../services/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-skeletor-user',
@@ -55,7 +56,7 @@ export class SkeletorUserComponent implements OnInit {
         },
         error: error => {
           if (error.status == 401) {
-            console.log(error.error.message)
+            Swal.fire('Error en el login',error.error.message,'error');
           } else {
             throw error;
           }
@@ -68,12 +69,14 @@ export class SkeletorUserComponent implements OnInit {
     this.sharingDataService.registerUserEventEmitter.subscribe(({ name, lastname, dni, email, password }) => {
       this.userService.createUser({ name, lastname, dni, email, password }).subscribe({
         next: response => {
-          console.log(response);
+          Swal.fire('Registro exitoso', 'Usuario registrado correctamente', 'success');
+          this.router.navigate(['/login']);
         },
         error: error => {
-          if (error.status == 401) {
-            console.log(error.error.message)
-          } else {
+          if (error.status == 400) {
+            Swal.fire('Error en el registro',error.error.error || 'Error desconocido','error');
+            console.log(error.error.error);
+          }else {
             throw error;
           }
         }

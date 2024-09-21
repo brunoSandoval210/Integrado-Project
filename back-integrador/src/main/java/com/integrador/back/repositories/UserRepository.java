@@ -14,10 +14,15 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Page<User> findAll(Pageable pageable);
     //Busca un usuario por su nombre de usuario
     Optional<User> findByEmail(String email);
-    //Busca un usuario por su nombre de usuario
-    Optional<User> findByUsername(String username);
-    //Busca un usuario por su DNI
-    Optional<User> findByDni(String dni);
     //Busca un usuario por su rol
     Page<User> findByRole_Id(Long id, Pageable pageable);
+    //Busca un usuario por su DNI
+    Optional<User> findByDni(String dni);
+    //Verificar si el usuario tiene un rol en particular
+    boolean existsByRole_Id(Long id);
+    //Verificar si existe un usuario con el mismo DNI
+    boolean existsByDni(String dni);
+    //Verificar si existe un usuario con el mismo email
+    boolean existsByEmail(String email);
+    //Cambiar status del usuario
 }

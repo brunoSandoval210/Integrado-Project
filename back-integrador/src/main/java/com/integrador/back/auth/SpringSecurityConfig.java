@@ -53,6 +53,11 @@ public class SpringSecurityConfig {
 //                .requestMatchers(HttpMethod.POST,"integrador/user").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"integrador/user").permitAll()
                 .requestMatchers(HttpMethod.PUT,"integrador/user/{id}").permitAll()
+                //Appointments routes
+                .requestMatchers(HttpMethod.GET,"integrador/appointment/{email}").permitAll()
+                .requestMatchers(HttpMethod.GET,"integrador/schedules/{page}").permitAll()
+                .requestMatchers(HttpMethod.POST,"integrador/schedule").permitAll()
+                .requestMatchers(HttpMethod.PUT,"integrador/schedule/{id}").permitAll()
                 .anyRequest().authenticated())
                 .cors(cors->cors.configurationSource(corsConfigurationSource()))
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
