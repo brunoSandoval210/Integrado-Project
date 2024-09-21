@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Date;
 
@@ -46,5 +48,14 @@ public class Schedule {
     @OneToOne(mappedBy = "schedule")
     @JsonIgnoreProperties({"schedule"})
     private Appointment appointment;
+
+
+    public int getDuration(){
+        int duration=0;
+        if(hourStart!=null && hourEnd!=null){
+            duration=(int) Duration.between(hourStart,hourEnd).toMinutes();
+        }
+        return duration;
+    }
 
 }
