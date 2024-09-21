@@ -83,8 +83,12 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     @Override
-    public void deleteById(Long id) {
-//        userRepository.deleteById(id);
+    public void deleteByDni(String dni) {
+        if(userRepository.existsByDni(dni)){
+            userRepository.deleteByDni(dni);
+        } else{
+            throw new IllegalArgumentException("El usuario no existe");
+        }
     }
 
     @Transactional(readOnly = true)

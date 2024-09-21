@@ -13,7 +13,7 @@ public interface UserService {
     Optional<User> findById(Long id);
     User save(UserCreateDTO user);
     Optional<User> update(UserUpdateDTO user, Long id);
-    void deleteById(Long id);
+    void deleteByDni(String dni);
     Page<User> findByRolId(Long id, Pageable pageable);
 }
 

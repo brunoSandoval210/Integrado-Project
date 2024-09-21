@@ -50,6 +50,7 @@ public class SpringSecurityConfig {
                 authorizeRequests
                 .requestMatchers(HttpMethod.GET,"integrador/users/{page}").permitAll()
                 .requestMatchers(HttpMethod.GET,"integrador/users/{roleId}/{page}").permitAll()
+                .requestMatchers(HttpMethod.DELETE,"integrador/user/{dni}").permitAll()
 //                .requestMatchers(HttpMethod.POST,"integrador/user").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"integrador/user").permitAll()
                 .requestMatchers(HttpMethod.PUT,"integrador/user/{id}").permitAll()
