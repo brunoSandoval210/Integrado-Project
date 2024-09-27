@@ -13,6 +13,7 @@ export class AuthService {
     isAuth:false,
     isAdmin:false,
     isDoctor:false,
+    isPatient:false,
     user:undefined
   };
 
@@ -79,12 +80,25 @@ export class AuthService {
     return this.user.isAuth;
   }
 
+  isPatient(){
+    return this.user.isPatient;
+  }
+
+  getUserRoles() {
+    const roles = [];
+    if (this.isAdmin()) roles.push('admin');
+    if (this.isDoctor()) roles.push('doctor');
+    if (this.isPatient()) roles.push('cliente');
+    return roles;
+  }
+
   logout(){
     this._token = undefined;
     this._user = {
       isAuth: false,
       isAdmin: false,
       isDoctor: false,
+      isPatient: false,
       user: undefined
     };
     if (this.isBrowser()) {
