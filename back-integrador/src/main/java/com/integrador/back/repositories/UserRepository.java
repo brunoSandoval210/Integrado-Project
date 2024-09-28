@@ -13,6 +13,9 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User,Long> {
     //Trae todos los usuarios paginados
+    @Query(value = "SELECT * FROM usuario WHERE status = 1",
+            countQuery = "SELECT count(*) FROM usuario WHERE status = 1",
+            nativeQuery = true)
     Page<User> findAll(Pageable pageable);
     //Busca un usuario por su nombre de usuario
     Optional<User> findByEmail(String email);

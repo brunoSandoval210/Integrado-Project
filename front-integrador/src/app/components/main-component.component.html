@@ -1,3 +1,9 @@
 <navbar-user class="w-full" />
 <router-outlet />
+@if(openConfigUser) {
+    <div class="abrir-modal animacion fadeIn">
+        <user-update-popper
+        (clickOutside)="closeModal()"/>
+        </div>
+} 
 <footer-user class="w-full" />

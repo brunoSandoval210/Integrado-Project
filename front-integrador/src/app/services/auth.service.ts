@@ -14,6 +14,7 @@ export class AuthService {
     isAdmin:false,
     isDoctor:false,
     isPatient:false,
+    id:0,
     user:undefined
   };
 
@@ -61,6 +62,10 @@ export class AuthService {
     return this._token!;
   }
 
+  getUserId(){
+    return this.user.id;
+  }
+
   getPayload(token:string){
     if(token !== undefined){
       return JSON.parse(atob(token.split(".")[1]));
@@ -84,12 +89,21 @@ export class AuthService {
     return this.user.isPatient;
   }
 
-  getUserRoles() {
-    const roles = [];
-    if (this.isAdmin()) roles.push('admin');
-    if (this.isDoctor()) roles.push('doctor');
-    if (this.isPatient()) roles.push('cliente');
-    return roles;
+  // getUserRoles() {
+  //   const roles = [];
+  //   if (this.isAdmin()) roles.push('admin');
+  //   if (this.isDoctor()) roles.push('doctor');
+  //   if (this.isPatient()) roles.push('cliente');
+  //   return roles;
+  // }
+
+  hasRole(role: string): boolean {
+    switch(role.toLowerCase()) {
+      case 'admin': return this.isAdmin();
+      case 'doctor': return this.isDoctor();
+      case 'cliente': return this.isPatient();
+      default: return false;
+    }
   }
 
   logout(){
@@ -99,6 +113,7 @@ export class AuthService {
       isAdmin: false,
       isDoctor: false,
       isPatient: false,
+      id: 0,
       user: undefined
     };
     if (this.isBrowser()) {

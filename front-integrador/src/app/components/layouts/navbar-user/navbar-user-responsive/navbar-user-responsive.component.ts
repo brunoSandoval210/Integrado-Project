@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../../../services/auth.service';
+import { SharingDataService } from '../../../../services/sharing-data.service';
 
 @Component({
   selector: 'navbar-user-responsive',
@@ -9,5 +11,18 @@ import { RouterModule } from '@angular/router';
   styleUrl: './navbar-user-responsive.component.scss'
 })
 export class NavbarUserResponsiveComponent {
+  showConfigUser:boolean=false;
+
+  constructor(
+    private authService:AuthService,
+    private router:Router,
+    private sharingDataService:SharingDataService
+  ){
+
+  }
+
+  get login(){
+    return this.authService.user;
+  }
 
 }

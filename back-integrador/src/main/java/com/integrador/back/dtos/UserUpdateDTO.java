@@ -29,6 +29,8 @@ public class UserUpdateDTO implements IUser{
     @Email(message = "El email debe ser valido")
     private String email;
 
+    private String password;
+
     private List<Specialization> specializations;
 
     @Size(max = 9,message = "El numero de telefono debe tener 9 digitos")

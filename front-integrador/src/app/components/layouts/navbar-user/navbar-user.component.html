@@ -3,29 +3,48 @@
         <div class="flex flex-grow">
             <img src="LogoS.png" alt="" class="w-12">
         </div>
-        <div class="flex lg:hidden">
-            <button (click)="showSliderEvent()">
-                <img src="menu.png" alt="" class="w-10">
-            </button>
+        <div class="flex flex-row gap-3">
+            <div class="flex lg:hidden">
+                <button class="mx-3" (click)="showSliderUserEvent()">
+                    <div class="flex flex-row items-center gap-3">
+                        <img src="usuario.png" alt="" class="w-7">
+                    </div>
+                    @if(showSliderUser){
+                        <div class="absolute top-8 right-16 bg-white w-52 mt-10 rounded-md shadow-md px-4 py-5 z-10">
+                            <p class="text-xs">{{login.user.username}}</p>
+                            <a class="text-xs block py-2 px-4 hover:bg-blue-500 hover:text-white transition duration-500 ease-out" (click)="setOpen()">Perfil</a>
+                            <a class="text-xs block py-2 px-4 hover:bg-blue-500 hover:text-white transition duration-500 ease-out" (click)="handlerLogout()">Cerrar sesion</a>
+                        </div>
+                    }
+                </button>
+                <div class="flex">
+                    <button (click)="showSliderEvent()">
+                        <img src="menu.png" alt="" class="w-10">
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="lg:flex hidden flex-grow justify-between">
             <div class="flex lg-flex-row mb-8 lg:mb-0 text-center items-center">
                 <a class="text-black lg:mr-7" [routerLink]="['/home']">Home</a>
-                <a class="text-black lg:mr-7" href="">Nosotros</a>
+                <!-- <a class="text-black lg:mr-7" href="">Nosotros</a> -->
+                @if(login.isAuth && login.isPatient) {
+                    <a class="text-black lg:mr-7" [routerLink]="['/mis-citas']">Mis citas</a>
+                    <a class="text-black lg:mr-7" [routerLink]="['/home']">Reservar cita</a>
+                }
             </div>
             <div class="flex lg:flex-row text-center">
-                @if (login.isAuth) {
-                    <button class="text-white bg-blue-500 border border-blue-500 rounded-md py-2.5 px-5 mx-3" 
-                    (click)="handlerLogout()">
-                        Cerrar sesion
-                    </button>
+                @if(login.isAuth && login.isPatient) {
                     <button class="mx-3" (click)="showSliderUserEvent()">
-                        <img src="usuario.png" alt="" class="w-10">
+                        <div class="flex flex-row items-center gap-3">
+                            <img src="usuario.png" alt="" class="w-7">
+                            <p class="text-xs">Mi perfil</p>
+                        </div>
                         @if(showSliderUser){
-                            <div class="absolute top-8 right-16 bg-white w-40 mt-10 rounded-md shadow-md px-3 py-5">
-                                <p>{{login.user.username}}</p>
-                                <a class="block py-2 px-4 hover:bg-blue-500 hover:text-white transition duration-500 ease-out" [routerLink]="['/profile']">Perfil</a>
-                                <a class="block py-2 px-4 hover:bg-blue-500 hover:text-white transition duration-500 ease-out" [routerLink]="['/profile']">Configuracion</a>
+                            <div class="absolute top-8 right-16 bg-white w-52 mt-10 rounded-md shadow-md px-4 py-5">
+                                <p class="text-xs">{{login.user.username}}</p>
+                                <a class="text-xs block py-2 px-4 hover:bg-blue-500 hover:text-white transition duration-500 ease-out" (click)="setOpen()">Perfil</a>
+                                <a class="text-xs block py-2 px-4 hover:bg-blue-500 hover:text-white transition duration-500 ease-out" (click)="handlerLogout()">Cerrar sesion</a>
                             </div>
                         }
                     </button>

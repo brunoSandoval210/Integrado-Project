@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalTime;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,8 +22,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
             "WHERE U.dni = ?1 AND H.status = 1",
             nativeQuery = true)
     Optional<Schedule> findAllByUser_Dni(String dni);
-    Page<Schedule> findAllByDateStart(Date dateStart, Pageable pageable);
-    Page<Schedule> findAllByDateStartAndUser_NameContaining(Date dateStart, String name, Pageable pageable);
     //un metodo que reciba el dia, la hora y el dni del doctor y verifique si hay un turno en ese horario
     Optional<Schedule> findByDateStartAndHourStartAndUser_Dni(Date dateStart, LocalTime hourStart, String dni);
     Optional<Schedule> findByDateStartAndDateEndAndHourStartAndHourEndAndUser_Dni(Date dateStart, Date dateEnd, LocalTime hourStart, LocalTime hourEnd, String dni);

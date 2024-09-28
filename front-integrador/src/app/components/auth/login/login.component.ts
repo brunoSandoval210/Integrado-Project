@@ -34,7 +34,6 @@ export class LoginComponent {
         username:this.user.username,
         password:this.user.password
       });
-      // this.user = new User();
     }
   }
 }

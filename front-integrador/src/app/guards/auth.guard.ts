@@ -9,19 +9,27 @@ export const authGuard: CanActivateFn = (route, state) => {
     if (service.isAuthenticated()) {
         if (isTokenExpired()) {
             service.logout();
+            router.navigate(['/login']);
             return false;
         }
-        const userRoles = {
-            isAdmin: service.isAdmin(),
-            isDoctor: service.isDoctor(),
-            isPatient:service.isPatient()
-        };
-        const allowedRoles = route.data?.['roles'] || []; // Roles permitidos definidos en la ruta
+        // const userRoles = {
+        //     isAdmin: service.isAdmin(),
+        //     isDoctor: service.isDoctor(),
+        //     isPatient:service.isPatient()
+        // };
+        // const allowedRoles = route.data?.['roles'] || []; // Roles permitidos definidos en la ruta
         // Verifica si el usuario tiene alguno de los roles permitidos para la ruta actual
-        if (allowedRoles.length > 0 
-            && !(userRoles.isAdmin && allowedRoles.includes('admin')) 
-            && !(userRoles.isDoctor && allowedRoles.includes('doctor')) 
-            && !(userRoles.isPatient && allowedRoles.includes('cliente'))) {
+        // if (allowedRoles.length > 0 
+        //     && !(userRoles.isAdmin && allowedRoles.includes('admin')) 
+        //     && !(userRoles.isDoctor && allowedRoles.includes('doctor')) 
+        //     && !(userRoles.isPatient && allowedRoles.includes('cliente'))) {
+        //     router.navigate(['/forbidden']);
+        //     return false;
+        // }
+        // Verificar si el usuario tiene uno de los roles permitidos
+        const allowedRoles = route.data?.['roles'] || [];
+        const hasAccess = allowedRoles.some((role: string) => service.hasRole(role));
+        if (!hasAccess) {
             router.navigate(['/forbidden']);
             return false;
         }

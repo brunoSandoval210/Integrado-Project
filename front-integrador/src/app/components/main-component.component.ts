@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { NavbarUserComponent } from './layouts/navbar-user/navbar-user.component';
-import { SlideUserComponent } from './layouts/slide-user/slide-user.component';
 import { FooterUserComponent } from './layouts/footer-user/footer-user.component';
 import { SharingDataService } from '../services/sharing-data.service';
 import { AuthService } from '../services/auth.service';
 import { UserService } from '../services/user.service';
 import { User } from '../model/user';
 import Swal from 'sweetalert2';
+import { UserUpdatePopperComponent } from './poppers/user-update-popper/user-update-popper.component';
 
 @Component({
   selector: 'app-main-component',
@@ -15,15 +15,16 @@ import Swal from 'sweetalert2';
   imports: [
             RouterOutlet,
             NavbarUserComponent,
-            SlideUserComponent,
             RouterModule,
-            FooterUserComponent
+            FooterUserComponent,
+            UserUpdatePopperComponent
   ],
   templateUrl: './main-component.component.html',
   styleUrl: './main-component.component.scss'
 })
 export class MainComponentComponent implements OnInit{
   users: User[] = [];
+  openConfigUser: boolean = false;
 
   constructor(
     private sharingDataService: SharingDataService,
@@ -37,7 +38,11 @@ export class MainComponentComponent implements OnInit{
   ngOnInit(): void {
     this.handlerLogin();
     this.registerUser();
-    this.roles();
+    // this.roles();
+    this.sharingDataService.popperUpdateUserEventEmitter.subscribe(()=>{
+      this.toggleModal();
+    });
+    this.updateUser();
   }
 
   handlerLogin() {
@@ -52,7 +57,8 @@ export class MainComponentComponent implements OnInit{
             isAuth: true,
             isAdmin: payload.isAdmin,
             isDoctor: payload.isDoctor,
-            isPatient: payload.isPatient
+            isPatient: payload.isPatient,
+            id: payload.id
           };
 
           this.authService.token = token;
@@ -79,8 +85,8 @@ export class MainComponentComponent implements OnInit{
   }
 
   registerUser() {
-    this.sharingDataService.registerUserEventEmitter.subscribe(({ name, lastname, dni, email, password }) => {
-      this.userService.createUser({ name, lastname, dni, email, password }).subscribe({
+    this.sharingDataService.registerUserEventEmitter.subscribe((user:User) => {
+      this.userService.createUser(user).subscribe({
         next: response => {
           Swal.fire('Registro exitoso', 'Usuario registrado correctamente', 'success');
           this.router.navigate(['/login']);
@@ -88,7 +94,6 @@ export class MainComponentComponent implements OnInit{
         error: error => {
           if (error.status == 400) {
             Swal.fire('Error en el registro',error.error.error || 'Error desconocido','error');
-            console.log(error.error.error);
           }else {
             throw error;
           }
@@ -98,8 +103,35 @@ export class MainComponentComponent implements OnInit{
     )
   }
 
-  roles(){
-    console.log(this.authService.getUserRoles());
-    return this.authService.getUserRoles();
+  updateUser(){
+    this.sharingDataService.updateUserEvenEmitter.subscribe((user:User)=>{
+      this.userService.updateUser(user).subscribe({
+        next: response => {
+          Swal.fire('Actualización exitosa', 'Usuario actualizado correctamente', 'success');
+          this.openConfigUser = false;
+        },
+        error: error => {
+          if (error.status == 400) {
+            Swal.fire('Error en la actualización',error.error.error || 'Error desconocido','error');
+          }else {
+            throw error;
+          }
+        }
+      })
+    });
   }
+
+  // roles(){
+  //   return this.authService.getUserRoles();
+  // }
+
+  //Cambiar el estado de la variable openConfigUser
+  toggleModal(){
+    this.openConfigUser = !this.openConfigUser;
+  }
+
+  closeModal(){
+    this.openConfigUser = false;
+  }
+
 }

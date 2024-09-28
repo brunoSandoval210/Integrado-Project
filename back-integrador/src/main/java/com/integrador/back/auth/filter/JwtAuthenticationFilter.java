@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.integrador.back.entities.User;
+import com.integrador.back.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
@@ -19,22 +20,19 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.integrador.back.auth.TokenConfig.*;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
+    private UserRepository userRepository;
 
-    public JwtAuthenticationFilter(
-        AuthenticationManager authenticationManager
-    ){
-        this.authenticationManager=authenticationManager;
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
     }
-
+    //Este metodo se encarga de autenticar al usuario con los datos del request y retorna la autenticación
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         String username=null;
@@ -57,17 +55,23 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return this.authenticationManager.authenticate(authenticationToken);
     }
 
+    //Este metodo se encarga de generar el token y agregarlo al header de la respuesta
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         //Se obtiene el usuario autenticado
         org.springframework.security.core.userdetails.User user=(org.springframework.security.core.userdetails.User)authResult.getPrincipal();
         String username=user.getUsername();
+        System.out.println(user.toString());
         //Se obtienen los roles del usuario
         Collection<? extends GrantedAuthority>roles=authResult.getAuthorities();
         //Se verifica si el usuario es administrador
         boolean isAdmin=roles.stream().anyMatch(role->role.getAuthority().equals("ROLE_ADMIN"));
         //Se verifica si el usuario es doctor
         boolean isDoctor=roles.stream().anyMatch(role->role.getAuthority().equals("ROLE_DOCTOR"));
+        //Se verifica si el usuario es paciente
+        boolean isclient=roles.stream().anyMatch(role->role.getAuthority().equals("ROLE_USER"));
+
+        Optional<User> userEntity=userRepository.findByEmail(username);
         //Se crean los claims del token
         Claims claims= Jwts
                 .claims()
@@ -75,6 +79,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                         .add("username",username)
                         .add("isAdmin",isAdmin)
                         .add("isDoctor",isDoctor)
+                        .add("isPatient",isclient)
+                        .add("id",userEntity.get().getId())
                         .build();
         //Se crea el token
         String jwt=Jwts.builder()

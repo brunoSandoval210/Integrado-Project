@@ -93,10 +93,10 @@ public class UserController {
     }
 
     @DeleteMapping("user/{dni}")
-    public ResponseEntity<Void> delete (@PathVariable String dni){
+    public ResponseEntity<?> delete (@PathVariable String dni){
         try{
             userService.deleteByDni(dni);
-            return ResponseEntity.status((HttpStatus.NO_CONTENT)).build();
+            return ResponseEntity.status(HttpStatus.OK).body("Se cambio el estado del usuario con dni: "+dni);
         }catch (IllegalArgumentException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }

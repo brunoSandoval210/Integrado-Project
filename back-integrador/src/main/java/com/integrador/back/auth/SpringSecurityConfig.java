@@ -3,6 +3,7 @@ package com.integrador.back.auth;
 
 import com.integrador.back.auth.filter.JwtAuthenticationFilter;
 import com.integrador.back.auth.filter.JwtValidationFilter;
+import com.integrador.back.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,9 @@ public class SpringSecurityConfig {
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
 
+    @Autowired
+    private UserRepository userRepository;
+
 //    public SpringSecurityConfig(
 //        AuthenticationConfiguration authenticationConfiguration
 //    ) {
@@ -51,9 +55,9 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.GET,"integrador/users/{page}").permitAll()
                 .requestMatchers(HttpMethod.GET,"integrador/users/{roleId}/{page}").permitAll()
                 .requestMatchers(HttpMethod.DELETE,"integrador/user/{dni}").permitAll()
-//                .requestMatchers(HttpMethod.POST,"integrador/user").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"integrador/user").permitAll()
-                .requestMatchers(HttpMethod.PUT,"integrador/user/{id}").permitAll()
+//                .requestMatchers(HttpMethod.PUT,"integrador/user/{id}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT,"integrador/user/{id}").hasAnyRole("ADMIN","USER","DOCTOR")
                 //Appointments routes
                 .requestMatchers(HttpMethod.GET,"integrador/appointment/{email}").permitAll()
                 .requestMatchers(HttpMethod.GET,"integrador/schedules/{page}").permitAll()
@@ -61,7 +65,7 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.PUT,"integrador/schedule/{id}").permitAll()
                 .anyRequest().authenticated())
                 .cors(cors->cors.configurationSource(corsConfigurationSource()))
-                .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(),userRepository))
                 .addFilter(new JwtValidationFilter(authenticationManager()))
                 .csrf(config->config.disable())
                 .sessionManagement(management->management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

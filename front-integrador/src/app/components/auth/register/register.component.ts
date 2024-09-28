@@ -18,8 +18,6 @@ export class RegisterComponent {
   }
 
   onRegister(userForm:NgForm) {
-   
       this.sharingDataService.registerUserEventEmitter.emit(this.user);
-    
   }
 }
