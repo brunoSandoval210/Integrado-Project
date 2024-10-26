@@ -1,6 +1,6 @@
 package com.integrador.back.repositories;
 
-import com.integrador.back.entities.Appointment;
+import com.integrador.back.model.entities.Appointment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

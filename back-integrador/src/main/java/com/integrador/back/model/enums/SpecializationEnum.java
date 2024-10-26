@@ -1,0 +1,20 @@
+package com.integrador.back.model.enums;
+
+public enum SpecializationEnum {
+    CARDIOLOGIA,
+    DERMATOLOGIA,
+    ENDOCRINOLOGIA,
+    GASTROENTEROLOGIA,
+    GINECOLOGIA,
+    HEMATOLOGIA,
+    NEFROLOGIA,
+    NEUROLOGIA,
+    OFTALMOLOGIA,
+    ONCOLOGIA,
+    OTORRINOLARINGOLOGIA,
+    PEDIATRIA,
+    PSIQUIATRIA,
+    REUMATOLOGIA,
+    TRAUMATOLOGIA,
+    UROLOGIA
+}

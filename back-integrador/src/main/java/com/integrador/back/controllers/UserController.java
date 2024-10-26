@@ -1,11 +1,11 @@
 package com.integrador.back.controllers;
 
-import com.integrador.back.dtos.UserCreateDTO;
-import com.integrador.back.dtos.UserUpdateDTO;
-import com.integrador.back.entities.User;
+import com.integrador.back.model.dtos.user.UserCreateRequest;
+import com.integrador.back.model.dtos.user.UserResponse;
+import com.integrador.back.model.dtos.user.UserUpdateRequest;
 import com.integrador.back.services.UserService;
 import jakarta.validation.Valid;
-import org.springframework.dao.DataIntegrityViolationException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,102 +14,87 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @RestController
-@RequestMapping("integrador/")
+@RequestMapping("user")
 public class UserController {
-    private UserService userService;
 
-    public UserController(
-            UserService userService
-    ) {
-        this.userService = userService;
-    }
+    private final UserService userService;
 
-    @GetMapping("users/{page}")
-    public ResponseEntity<?> listPageable(@PathVariable Integer page){
-        Pageable pageable= PageRequest.of(page,10);
-        try{
-            Page<User> users=userService.findAll(pageable);
-            return ResponseEntity.ok(users);
-        }catch (IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", e.getMessage()));
-        }
-    }
-
-    @GetMapping("users/{roleId}/{page}")
-    public ResponseEntity<?> listPageableClient(@PathVariable Long roleId,@PathVariable Integer page){
-        Pageable pageable= PageRequest.of(page,10);
-        try{
-            Page<User> users=userService.findByRolId(roleId,pageable);
-            return ResponseEntity.ok(users);
-        }catch (IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", e.getMessage()));
-        }
-    }
-
-    @GetMapping("user/{id}")
-    public ResponseEntity<?> show(@PathVariable Long id){
-        Optional<User> user=userService.findById(id);
-        if(user.isPresent()){
-            //Se retorna un 200 porque se encontro el usuario
-            return ResponseEntity.status(HttpStatus.OK).body(user.orElseThrow());
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Collections.singletonMap("error","El usuario no se encontro por el id: "+id));
-    }
-
-    @PostMapping("user")
-    public ResponseEntity<?> create(@Valid @RequestBody UserCreateDTO user, BindingResult result) {
+    @PostMapping("")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserCreateRequest user, BindingResult result) {
         if (result.hasErrors()) {
-            return validation(result);
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
         }
         try {
-            User newUser = userService.save(user);
-            //Se retorna un 201 porque se creo el usuario
-            return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+            Optional<UserResponse> savedUser = userService.saveUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedUser.get());
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+            // Devolver el mensaje de la excepción
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            // Manejar cualquier otra excepción inesperada
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado: " + e.getMessage());
         }
     }
-
-    @PutMapping("user/{id}")
-    public ResponseEntity<?> update(@Valid @RequestBody UserUpdateDTO user,
-                                    @PathVariable Long id,
-                                    BindingResult result){
-        if(result.hasErrors()){
-            return validation(result);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserUpdateRequest user,@PathVariable Long id ,BindingResult result) {
+        if (result.hasErrors()) {
+            List<String> errors = result.getFieldErrors().stream()
+                    .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
         }
-        Optional<User>optionalUser=userService.update(user,id);
-        if(optionalUser.isPresent()){
-            //Se retorna un 200 porque se actualizo el usuario
-            return ResponseEntity.status(HttpStatus.OK).body(optionalUser.orElseThrow());
+        try {
+            Optional<UserResponse> updateUser = userService.updateUser(user,id);
+            return ResponseEntity.status(HttpStatus.OK).body(updateUser.get());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado: " + e.getMessage());
         }
-        return ResponseEntity.notFound().build();
     }
-
-    @DeleteMapping("user/{dni}")
-    public ResponseEntity<?> delete (@PathVariable String dni){
-        try{
-            userService.deleteByDni(dni);
-            return ResponseEntity.status(HttpStatus.OK).body("Se cambio el estado del usuario con dni: "+dni);
-        }catch (IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> toggleStatus(@PathVariable Long id) {
+        try {
+            String status = userService.toggleStatus(id);
+            return ResponseEntity.status(HttpStatus.OK).body(status);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado: " + e.getMessage());
+        }
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        try {
+            UserResponse user = userService.getUserById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado: " + e.getMessage());
+        }
     }
-
-    private ResponseEntity<?> validation (BindingResult result){
-        Map<String,String> errors=new HashMap<>();
-        //Se recorre los errores y se guarda en un mapa
-        result.getFieldErrors().forEach(error->{
-            errors.put(error.getField(),
-                    "El campo "+error.getField()+" "+error.getDefaultMessage());
-        });
-        //Se retorna un 400 porque hubo un error en la validacion
-        return ResponseEntity.badRequest().body(errors);
+    @GetMapping("/todos")
+    public ResponseEntity<?> getAllUsers(@RequestParam Long roleId,
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page, size);
+        try {
+            Page<UserResponse> users = userService.getAllUsers(roleId, pageable);
+            return ResponseEntity.status(HttpStatus.OK).body(users);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado: " + e.getMessage());
+        }
     }
 }
