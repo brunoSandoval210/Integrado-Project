@@ -113,6 +113,7 @@ public class UserServiceImpl implements UserService {
                         // Setear el Schedule en la cita
                         scheduleResponse.setDoctorName(appointment.getSchedule().getUser().getName() + " " +
                                 appointment.getSchedule().getUser().getLastname());
+                        scheduleResponse.setSpecialty(appointment.getSchedule().getUser().getSpecialization().getName());
                         appointmentResponse.setSchedule(scheduleResponse);
                         return appointmentResponse;
                     })
@@ -128,6 +129,7 @@ public class UserServiceImpl implements UserService {
                         return scheduleResponse;
                     })
                     .collect(Collectors.toList());
+            userResponse.setSchedules(scheduleResponses);
         }
         return userResponse;
     }
@@ -150,6 +152,7 @@ public class UserServiceImpl implements UserService {
                             // Setear el Schedule en la cita
                             scheduleResponse.setDoctorName(appointment.getSchedule().getUser().getName() + " " +
                                     appointment.getSchedule().getUser().getLastname());
+                            scheduleResponse.setSpecialty(appointment.getSchedule().getUser().getSpecialization().getName());
                             appointmentResponse.setSchedule(scheduleResponse);
                             return appointmentResponse;
                         })
@@ -165,6 +168,7 @@ public class UserServiceImpl implements UserService {
                             return scheduleResponse;
                         })
                         .collect(Collectors.toList());
+                userResponse.setSchedules(scheduleResponses);
             }
 
             return userResponse;

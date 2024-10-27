@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface AppointmentService {
-    Page<Appointment> findAllByUserEmail(Pageable pageable,String email);
+    Page<Appointment> findAllWithFilters(Pageable pageable, Long idUser, Integer status, String statusAppointment);
 }

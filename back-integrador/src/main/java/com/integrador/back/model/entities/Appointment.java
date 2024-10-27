@@ -26,8 +26,7 @@ public class Appointment extends Maintenance{
 //    @Column(name = "fecha_cita")
 //    private LocalDate dateAppointment;
 
-    @Enumerated(EnumType.STRING)
-    private StatusAppintmentEnum statusAppointment;
+    private String statusAppointment;
 
     @JsonIgnoreProperties({"appointments"})
     @ManyToOne

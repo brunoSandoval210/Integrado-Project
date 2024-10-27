@@ -17,7 +17,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Entity
 @Table(name = "historial_medico")
 public class MedicalHistory extends Maintenance{
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "historial_medico_id")

@@ -44,8 +44,7 @@ public class Schedule extends Maintenance{
     @JsonIgnoreProperties({"schedule"})
     private Appointment appointment;
 
-    @Enumerated(EnumType.STRING)
-    private StatusScheduleEnum statusSchedule;
+    private String statusSchedule;
 //    public int getDuration(){
 //        int duration=0;
 //        if(hourStart!=null && hourEnd!=null){

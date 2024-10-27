@@ -13,4 +13,5 @@ public class ScheduleAppointmentResponse {
     private LocalTime hourEnd;
     private String statusSchedule;
     private String doctorName;
+    private String specialty;
 }
