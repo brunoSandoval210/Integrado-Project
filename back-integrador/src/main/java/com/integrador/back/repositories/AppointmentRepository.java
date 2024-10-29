@@ -15,4 +15,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
             "AND (:status IS NULL OR a.status = :status) " +
             "AND (:statusAppointment IS NULL OR a.statusAppointment = :statusAppointment)")
     Page<Appointment>findAllByFilters(Pageable pageable, Long idUser, Integer status, String statusAppointment);
+
 }

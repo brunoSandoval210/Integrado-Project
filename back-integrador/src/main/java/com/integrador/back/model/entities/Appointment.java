@@ -41,4 +41,8 @@ public class Appointment extends Maintenance{
     @OneToMany(mappedBy = "appointment")
     @JsonIgnoreProperties({"appointment"})
     private List<Reschedule> reschedules;
+
+    @OneToMany(mappedBy = "appointment")
+    @JsonIgnoreProperties({"appointment"})
+    private List<DetailsMedicalHistory> detailsMedicalHistory;
 }

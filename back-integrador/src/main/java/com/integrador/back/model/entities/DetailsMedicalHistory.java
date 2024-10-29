@@ -27,7 +27,7 @@ public class DetailsMedicalHistory{
     @MapsId("appointmentId")  // Vincula el ID embebido con la entidad Appointment
     @JoinColumn(name = "cita_id")
     @JsonIgnoreProperties({"detailsMedicalHistory"})
-    private Appointment apoointment;
+    private Appointment appointment;
 
     @Column(name = "detalle")
     private String detalle;

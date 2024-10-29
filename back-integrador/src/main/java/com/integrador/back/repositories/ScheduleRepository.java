@@ -28,15 +28,15 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
                                  @Param("status") Integer status,
                                  @Param("statusSchedule") String statusSchedule);
 
-    boolean existsByDateAndHourStartAndHourEndAndUser_Id(LocalDate date, LocalTime hourStart, LocalTime hourEnd, Long idUser);
+    boolean existsByDateAndHourStartAndHourEndAndUser_Id(LocalDate date,
+                                                         LocalTime hourStart,
+                                                         LocalTime hourEnd,
+                                                         Long idUser);
 
     @Query("select count(s) > 0 from Schedule s " +
             "where s.user.id = :userId " +
             "and s.date = :date " +
-            "and ((:hourStart between s.hourStart and s.hourEnd) " +
-            "or (:hourEnd between s.hourStart and s.hourEnd) " +
-            "or (s.hourStart between :hourStart and :hourEnd) " +
-            "or (s.hourEnd between :hourStart and :hourEnd))")
+            "and ((:hourStart < s.hourEnd and :hourEnd > s.hourStart))")
     boolean existsOverlappingSchedule(@Param("userId") Long userId,
                                       @Param("date") LocalDate date,
                                       @Param("hourStart") LocalTime hourStart,
