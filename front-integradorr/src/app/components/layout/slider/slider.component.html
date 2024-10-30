@@ -1,0 +1,26 @@
+  <div class="sidenav" [ngClass]="collapse ? 'sidenav-collapse' : ''">
+    <div class="logo-container">
+      <button class="logo" (click)="toggleCollapse()">A</button>
+      @if(collapse){
+        <div class="logo-text">angular</div>
+        <button class="btn-close" (click)="closeSidenav()">
+          <i class="fal fa-times close-icon"></i>
+        </button>
+      }
+    </div>
+    <ul class="sidenav-nav">
+      @for (item of filteredNavbarData; track $index) {
+        <li class="sidenav-nav-item">
+          <a class="sidenav-nav-link" [routerLink]="item.routerLink"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: true}"
+          >
+            <i class="{{ item.icon }}"></i>
+            @if (collapse) {
+              <span class="sidenav-link-text">{{ item.label}}</span>
+            }
+          </a>
+        </li>
+      }
+    </ul>
+  </div>

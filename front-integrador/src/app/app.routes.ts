@@ -9,31 +9,24 @@ import { MainComponentComponent } from './components/main-component.component';
 
 export const routes: Routes = [
     {
-        path:'',
-        pathMatch:'full',
-        redirectTo:'home'
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'home'
     },
     {
-        path:'',
-        component:MainComponentComponent,
-        children:[
-            {path:'home',component:HomeComponent},
-            {path:'login',component:LoginComponent},
-            {path:'register',component:RegisterComponent}
-        ]
-    },
-     // Rutas para clientes
-     {
         path: '',
         component: MainComponentComponent,
-        children:[
-            {path:'mis-citas',component:AppointmentsBookedComponent,canActivate: [authGuard],data: { roles: ['cliente'] }}
+        children: [
+            { path: 'home', component: HomeComponent },
+            { path: 'login', component: LoginComponent },
+            { path: 'register', component: RegisterComponent },
+            {
+                path: 'mis-citas',
+                component: AppointmentsBookedComponent,
+                canActivate: [authGuard],
+                data: { roles: ['cliente'] }
+            },
+            { path: 'forbidden', component: ForbiddenComponent }
         ]
-        // canActivate: [authGuard],
-        // data: { roles: ['cliente'] }
-      },
-    {
-        path:'forbidden',
-        component:ForbiddenComponent
-    },
+    }
 ];

@@ -1,0 +1,498 @@
+{
+	"info": {
+		"_postman_id": "663c3dee-1245-4cd2-b023-161c1066a92d",
+		"name": "IntegradorCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29623058"
+	},
+	"item": [
+		{
+			"name": "Usuario",
+			"item": [
+				{
+					"name": "http://localhost:8080/user/create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"name\": \"Rosa\",\r\n        \"lastname\": \"Mendez\",\r\n        \"dni\": \"92837456\",\r\n        \"email\": \"rosa.mendez@example.com\",\r\n        \"password\": \"Password123\",\r\n        \"status\": 1,\r\n        \"role\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/user/10",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwic3ViIjoicm9zYS5tZW5kZXpAZXhhbXBsZS5jb20iLCJpYXQiOjE3Mjk5ODA3MTAsImV4cCI6MTcyOTk4MjE1MH0.BUjsus-cfOHTvub14IGv7aFfypAD3MOZXbAlrF7amMA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"bruno\",\r\n    \"lastname\": \"sandoval\",\r\n    \"dni\": \"60871996\",\r\n    \"email\": \"bruno.sandoval210@gmail.com\",\r\n\r\n    \"role\": 1,\r\n    // \"specialization\":\"2\",\r\n    \"status\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/user/10",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/user/todos?roleId=1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwic3ViIjoicm9zYS5tZW5kZXpAZXhhbXBsZS5jb20iLCJpYXQiOjE3MzAwMDIwMTksImV4cCI6MTczMDAwMzQ1OX0.i4sTQRvSsLDvJ4EwoERyyb-NSqHJeTyuY_xl_ywRKmY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/todos?roleId=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"todos"
+							],
+							"query": [
+								{
+									"key": "roleId",
+									"value": "2"
+								},
+								{
+									"key": "size",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/user/1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwic3ViIjoicm9zYS5tZW5kZXpAZXhhbXBsZS5jb20iLCJpYXQiOjE3Mjk5ODA3MTAsImV4cCI6MTcyOTk4MjE1MH0.BUjsus-cfOHTvub14IGv7aFfypAD3MOZXbAlrF7amMA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Rol",
+			"item": []
+		},
+		{
+			"name": "Seguridad",
+			"item": [
+				{
+					"name": "http://localhost:8080/auth/login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"rosa.mendez@example.com\",\r\n    \"password\":\"Password123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Horario",
+			"item": [
+				{
+					"name": "http://localhost:8080/schedule/todos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwic3ViIjoicm9zYS5tZW5kZXpAZXhhbXBsZS5jb20iLCJpYXQiOjE3Mjk5OTE2MDEsImV4cCI6MTcyOTk5MzA0MX0.t4X3N08fr6w9S1CbfEbTPy8amQxpUdvxabz4bUJdEX0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/schedule/todos?filterDay=2024-10-25",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"schedule",
+								"todos"
+							],
+							"query": [
+								{
+									"key": "filterDay",
+									"value": "2024-10-25"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/schedule",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwic3ViIjoicm9zYS5tZW5kZXpAZXhhbXBsZS5jb20iLCJpYXQiOjE3MzAxNTM5NTcsImV4cCI6MTczMDE1NTM5N30.Ug2ggfrh38uzLEW-gYZU7zNG31JvweemiHBSphBK8ZU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"date\": \"2024-10-28\",\r\n  \"hourStart\": \"10:30\",\r\n  \"hourEnd\": \"11:00\",\r\n  \"statusSchedule\": \"LIBRE\",\r\n  \"doctorId\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/schedule",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"schedule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/schedule/6",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwic3ViIjoicm9zYS5tZW5kZXpAZXhhbXBsZS5jb20iLCJpYXQiOjE3Mjk5OTk4MjYsImV4cCI6MTczMDAwMTI2Nn0.LXjBBBAlgmJJBl4MW4F_tACap32Zt7CkgW_yBkZhz_M",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/schedule/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"schedule",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/schedule/6",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwic3ViIjoicm9zYS5tZW5kZXpAZXhhbXBsZS5jb20iLCJpYXQiOjE3Mjk5OTk4MjYsImV4cCI6MTczMDAwMTI2Nn0.LXjBBBAlgmJJBl4MW4F_tACap32Zt7CkgW_yBkZhz_M",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"date\": \"2024-12-01\",\r\n  \"hourStart\": \"10:00\",\r\n  \"hourEnd\": \"11:00\",\r\n  \"statusSchedule\": \"LIBRE\",\r\n  \"doctorId\": 6\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/schedule/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"schedule",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/appointments/reprogramar",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwic3ViIjoicm9zYS5tZW5kZXpAZXhhbXBsZS5jb20iLCJpYXQiOjE3MzAxNTg0MTUsImV4cCI6MTczMDE1OTg1NX0.2GNmXjhyKmt7T5Y562CcS9omFSd9K4K8gMSHlwY4Gxk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"previousDate\":\"2024-10-28\",\r\n    \"newDate\":\"2024-10-28\",\r\n    \"hourStart\":\"13:00\",\r\n    \"hourEnd\":\"13:00\",\r\n    \"reason\":\"tuvo problemas\",\r\n    \"appointmentId\": 11\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/appointments/reprogramar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"appointments",
+								"reprogramar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Citas",
+			"item": [
+				{
+					"name": "http://localhost:8080/appointments/confiltros",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwic3ViIjoicm9zYS5tZW5kZXpAZXhhbXBsZS5jb20iLCJpYXQiOjE3MzAwNDY1MjQsImV4cCI6MTczMDA0Nzk2NH0.oOXKkCvH7dUVMpIXcMDlwSEgqYHuG3FAzloeslqBJ3Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/appointments/confiltros",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"appointments",
+								"confiltros"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "idUser",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "statusAppointment",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:8080/appointments",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwic3ViIjoicm9zYS5tZW5kZXpAZXhhbXBsZS5jb20iLCJpYXQiOjE3MzAxNTM5NTcsImV4cCI6MTczMDE1NTM5N30.Ug2ggfrh38uzLEW-gYZU7zNG31JvweemiHBSphBK8ZU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"statusAppointment\":\"CONFIRMADA\",\r\n    \"userId\":14,\r\n    \"scheduleId\":9\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/appointments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"appointments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,40 @@
+<section class="py-5 text-center container-fluid background-image">
+  <div class="container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 ms-lg-5 mt-5">
+        <h1 class="fw-semibold text-dark small-font">Tu clínica de confianza</h1>
+        <p class="lead fw-semibold text-dark small-font-lead">Máxima precisión en tus análisis, sean de rutina o de alta
+          complejidad, gracias a nuestros profesionales y nuestros equipos de última generación con reconocimiento a
+          nivel mundial.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="col-lg-6 col-md-8 mx-auto mt-5 text-center">
+    <h2 class="fw-semibold text-dark">Nuestros profesionales</h2>
+    <p class="lead fw-semibold text-dark" style="font-size: 1rem;">
+      Somos un grupo de profesionales altamente capacitados y experimentados. Contamos con más de 20 años de trayectoria
+      profesional en el sector.
+    </p>
+  </div>
+</div>
+
+<div class="album py-5 bg-body-white">
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      @for (card of cards; track $index) {
+      <div class="col">
+        <div class="card h-100" style="border: none;">
+          <img [src]="card.img" class="bd-placeholder-img card-img-top" width="100%" alt="{{card.title}}">
+          <div class="card-body">
+            <h5 class="card-title text-center">{{card.title}}</h5>
+            <p class="card-text">{{card.description}}</p>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>

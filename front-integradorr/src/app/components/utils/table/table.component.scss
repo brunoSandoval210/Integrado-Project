@@ -1,0 +1,43 @@
+/* Estilo de la tabla */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .custom-table thead {
+    background-color: #3d6ad6; /* Color azul del encabezado */
+    color: white;
+  }
+  
+  .custom-table th,
+  .custom-table td {
+    padding: 1rem;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .custom-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .table-header {
+    font-weight: bold;
+    font-size: 1rem;
+  }
+  
+  /* Ajuste de las celdas para evitar que el contenido esté al borde */
+  .custom-table td {
+    padding-left: 1rem;
+  }
+  
+  /* Opcional: Hover para las filas */
+  .custom-table tbody tr:hover {
+    background-color: #f1f5f9;
+  }
+  

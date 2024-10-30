@@ -1,0 +1,53 @@
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .background-image {
+    background-image: url('../../../../public/asents/img_home/home.jpg'); /* Ruta a tu imagen de fondo */
+    background-size: cover; /* Ajusta la imagen para cubrir toda la sección */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    height: 100vh; /* Ajusta la altura para que ocupe toda la altura de la ventana */
+    padding: 5rem 0; /* Ajusta el padding según tus necesidades */
+  }
+  
+  @media (max-width: 500px) {
+    .small-font {
+      font-size: 1rem; /* Ajusta el tamaño según tus necesidades */
+    }
+  
+    .small-font-lead {
+      font-size: 0.875rem; /* Ajusta el tamaño según tus necesidades */
+    }
+  }
+
+  @media (max-width: 500px) {
+    .background-image {
+      height: 30vh; /* Ajusta la altura para pantallas muy pequeñas */
+      padding: 1rem 0; /* Ajusta el padding para pantallas muy pequeñas */
+    }
+  }
+  @media (max-width: 767px) {
+    .background-image {
+      height: 50vh; /* Ajusta la altura para pantallas pequeñas */
+      padding: 2rem 0; /* Ajusta el padding para pantallas pequeñas */
+    }
+  }
+  
+  @media (min-width: 768px) and (max-width: 991px) {
+    .background-image {
+      height: 70vh; /* Ajusta la altura para pantallas medianas */
+      padding: 3rem 0; /* Ajusta el padding para pantallas medianas */
+    }
+  }
+  
+  @media (min-width: 992px) {
+    .background-image {
+      height: 100vh; /* Ajusta la altura para pantallas grandes */
+      padding: 5rem 0; /* Ajusta el padding para pantallas grandes */
+    }
+  }

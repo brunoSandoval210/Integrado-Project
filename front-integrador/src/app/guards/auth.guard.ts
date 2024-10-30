@@ -12,39 +12,43 @@ export const authGuard: CanActivateFn = (route, state) => {
             router.navigate(['/login']);
             return false;
         }
-        // const userRoles = {
-        //     isAdmin: service.isAdmin(),
-        //     isDoctor: service.isDoctor(),
-        //     isPatient:service.isPatient()
-        // };
-        // const allowedRoles = route.data?.['roles'] || []; // Roles permitidos definidos en la ruta
-        // Verifica si el usuario tiene alguno de los roles permitidos para la ruta actual
-        // if (allowedRoles.length > 0 
-        //     && !(userRoles.isAdmin && allowedRoles.includes('admin')) 
-        //     && !(userRoles.isDoctor && allowedRoles.includes('doctor')) 
-        //     && !(userRoles.isPatient && allowedRoles.includes('cliente'))) {
-        //     router.navigate(['/forbidden']);
-        //     return false;
-        // }
+
         // Verificar si el usuario tiene uno de los roles permitidos
         const allowedRoles = route.data?.['roles'] || [];
-        const hasAccess = allowedRoles.some((role: string) => service.hasRole(role));
-        if (!hasAccess) {
+        const userRole = service.user.role; // Asegúrate de que el rol esté en el servicio
+
+        if (allowedRoles.length > 0 && !allowedRoles.includes(userRole)) {
             router.navigate(['/forbidden']);
             return false;
         }
-        return true;
+
+        // Redirigir a un componente según el rol
+        switch (userRole) {
+            case 'ROLE_ADMIN':
+                router.navigate(['/admin']);
+                break;
+            case 'ROLE_USER':
+                router.navigate(['/mis-citas']);
+                break;
+            case 'ROLE_DOCTOR':
+                router.navigate(['/doctor']);
+                break;
+            // Agrega más roles según sea necesario
+            default:
+                router.navigate(['/home']);
+        }
+
+        return true; // El usuario está autenticado y tiene acceso
     }
     router.navigate(['/login']);
     return false;
 }
 
-//funcion para verificar si el token ha expirado
-const isTokenExpired=()=>{
-    const service=inject(AuthService);
-    const token=service.token;
-    const payload=service.getPayload(token);
-    const exp=payload.exp;
-    const now=new Date().getTime()/1000;
-    return (now>exp)?true:false;
+const isTokenExpired = () => {
+    const service = inject(AuthService);
+    const token = service.token;
+    const payload = service.getPayload(token);
+    const exp = payload?.exp; // Asegúrate de que exp no sea undefined
+    const now = new Date().getTime() / 1000;
+    return (now > exp) ? true : false;
 }

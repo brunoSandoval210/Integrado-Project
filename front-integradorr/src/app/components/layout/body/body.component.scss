@@ -1,0 +1,30 @@
+.body-home{
+    
+}
+
+/* Estado: Slider colapsado */
+.body {
+    position: relative;
+    width: calc(100% - 5rem); /* Ancho del body cuando el slider está colapsado */
+    height: 100vh;
+    margin-left: 5rem; /* Margen del slider colapsado */
+    z-index: 0;
+    top: 0;
+    transition: all 0.5s ease;
+    background: #f4f7fa;
+    padding: 3rem;
+}
+
+/* Estado: Slider expandido */
+.body-trimmed {
+    position: relative;
+    width: calc(100% - 16.5625rem); /* Ajustar ancho para slider expandido */
+    margin-left: 16.5625rem; /* Margen aumentado */
+    height: 100vh;
+    z-index: 0;
+    top: 0;
+    transition: all 0.5s ease;
+    background: #f4f7fa;
+    padding: 3rem;
+}
+

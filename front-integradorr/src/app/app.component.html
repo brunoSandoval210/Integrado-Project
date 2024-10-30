@@ -1,0 +1,9 @@
+@if(!authService.isAuthenticated()){
+    <app-navbar></app-navbar>
+} @else{
+    <app-slider></app-slider>
+}
+<app-body></app-body>
+@if(!authService.isAuthenticated()){
+<app-footer></app-footer>
+}

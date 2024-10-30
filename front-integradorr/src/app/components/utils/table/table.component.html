@@ -1,0 +1,19 @@
+<table class="table custom-table">
+    <thead>
+        <tr class="table-header">
+            @for (column of columns; track $index) {
+                <th scope="col">{{column.label }}</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (row of data; track $index) {
+            <tr scope="row">
+                @for (column of columns; track $index) {
+                    <td>{{row[column.key]}}</td>
+                }
+            </tr>
+        }
+      <tr>
+    </tbody>
+  </table>

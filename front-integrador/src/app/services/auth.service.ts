@@ -6,36 +6,34 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-
-  private url:string="http://localhost:8080/login";
-  private _token!:string | undefined;
-  private _user:any={
-    isAuth:false,
-    isAdmin:false,
-    isDoctor:false,
-    isPatient:false,
-    id:0,
-    user:undefined
+  private url: string = "http://localhost:8080/auth/login";
+  private _token!: string | undefined;
+  private _user: any = {
+    role: '',
+    id: 0,
+    user: undefined,
+    isAuth: false,
   };
 
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   private isBrowser(): boolean {
     return typeof window !== 'undefined';
   }
 
-  loginUser({username,password}:any):Observable<any>{
-    return this.http.post<any>(this.url,{username,password});
+  loginUser({ username, password }: any): Observable<any> {
+    return this.http.post<any>(this.url, { username, password });
   }
 
-  set user(user:any){
+  set user(user: any) {
     this._user = user;
+    this._user.isAuth = true; // Asegúrate de marcar el usuario como autenticado
     if (this.isBrowser()) {
       sessionStorage.setItem('login', JSON.stringify(user));
     }
   }
 
-  get user(){
+  get user() {
     if (this._user.isAuth) {
       return this._user;
     } else if (this.isBrowser() && sessionStorage.getItem('login') != null) {
@@ -44,15 +42,15 @@ export class AuthService {
     }
     return this._user;
   }
-  
-  set token(token:string){
+
+  set token(token: string) {
     this._token = token;
     if (this.isBrowser()) {
       sessionStorage.setItem('token', token);
     }
   }
 
-  get token(){
+  get token() {
     if (this._token !== undefined) {
       return this._token;
     } else if (this.isBrowser() && sessionStorage.getItem('token') != null) {
@@ -62,57 +60,46 @@ export class AuthService {
     return this._token!;
   }
 
-  getUserId(){
+  getUserId() {
     return this.user.id;
   }
 
-  getPayload(token:string){
-    if(token !== undefined){
+  getPayload(token: string) {
+    if (token !== undefined) {
       return JSON.parse(atob(token.split(".")[1]));
     }
     return null;
   }
 
-  isAdmin(){
-    return this.user.isAdmin;
+  isAuthenticated(): boolean {
+    return this.user.isAuth; // Retorna si el usuario está autenticado
   }
-
-  isDoctor(){
-    return this.user.isDoctor;
-  }
-
-  isAuthenticated(){
-    return this.user.isAuth;
-  }
-
-  isPatient(){
-    return this.user.isPatient;
-  }
-
-  // getUserRoles() {
-  //   const roles = [];
-  //   if (this.isAdmin()) roles.push('admin');
-  //   if (this.isDoctor()) roles.push('doctor');
-  //   if (this.isPatient()) roles.push('cliente');
-  //   return roles;
-  // }
 
   hasRole(role: string): boolean {
-    switch(role.toLowerCase()) {
-      case 'admin': return this.isAdmin();
-      case 'doctor': return this.isDoctor();
-      case 'cliente': return this.isPatient();
-      default: return false;
+    const payload = this.getPayload(this.token);
+    if (payload && payload.authorities) {
+      return payload.authorities.includes(role); // Comprueba si el rol está en las autoridades
     }
+    return false;
+  }
+  
+  isAdmin(): boolean {
+    return this.hasRole('ROLE_ADMIN'); // Usa el rol adecuado
+  }
+  
+  isDoctor(): boolean {
+    return this.hasRole('ROLE_DOCTOR'); // Usa el rol adecuado
+  }
+  
+  isPatient(): boolean {
+    return this.hasRole('ROLE_USER'); // Usa el rol adecuado
   }
 
-  logout(){
+  logout() {
     this._token = undefined;
     this._user = {
       isAuth: false,
-      isAdmin: false,
-      isDoctor: false,
-      isPatient: false,
+      role: '',
       id: 0,
       user: undefined
     };
@@ -121,5 +108,4 @@ export class AuthService {
       sessionStorage.removeItem('token');
     }
   }
-
 }
