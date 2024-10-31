@@ -68,12 +68,15 @@ export class HorariosComponent implements OnInit {
     });
     this.sharingDataService.pageSizeChange.subscribe(newSize => {
       this.pageSize = newSize;
-      this.currentPage = 1; // Reset to first page
+      this.currentPage = 1;
       this.getSchedules();
     });
     this.sharingDataService.onScheduleCreated.subscribe(() => {
       this.onScheduleCreated();
     });
+    // this.sharingDataService.edit.subscribe(schedule =>{
+    //   this.openModal(true, schedule);
+    // });
     this.getUsers();
   }
 
@@ -104,16 +107,13 @@ export class HorariosComponent implements OnInit {
     this.getSchedules();
   }
 
-  openModal(editMode: boolean = false, schedule: any = null): void {
-    this.isEditMode = editMode;
-    this.selectedSchedule = schedule;
-    this.isModalOpen = true;
+  openModal(): void {
+    this.sharingDataService.onOpenCloseModal.emit(true);
+
   }
 
   closeModal(): void {
-    this.isModalOpen = false;
-    this.isEditMode = false;
-    this.selectedSchedule = null;
+    this.sharingDataService.onOpenCloseModal.emit(false);
   }
 
   onScheduleCreated(): void {
@@ -142,5 +142,11 @@ export class HorariosComponent implements OnInit {
         console.error('Error fetching users', error);
       }
     );
+  }
+
+  onPageSizeChange(newSize:number): void {
+    this.pageSize = newSize;
+    this.currentPage = 1;
+    this.getSchedules();
   }
 }

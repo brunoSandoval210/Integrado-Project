@@ -69,7 +69,7 @@ export class HorariosComponent implements OnInit {
     });
     this.sharingDataService.pageSizeChange.subscribe(newSize => {
       this.pageSize = newSize;
-      this.currentPage = 1; // Reset to first page
+      this.currentPage = 1;
       this.getSchedules();
     });
     this.sharingDataService.onScheduleCreated.subscribe(() => {
@@ -105,16 +105,16 @@ export class HorariosComponent implements OnInit {
     this.getSchedules();
   }
 
-  openModal(editMode: boolean = false, schedule: any = null): void {
-    this.isEditMode = editMode;
-    this.selectedSchedule = schedule;
-    this.isModalOpen = true;
+  openModal(): void {
+    // this.isEditMode = editMode;
+    // this.selectedSchedule = schedule;
+    this.sharingDataService.onOpenCloseModal.emit(true);
   }
 
   closeModal(): void {
-    this.isModalOpen = false;
-    this.isEditMode = false;
-    this.selectedSchedule = null;
+    this.sharingDataService.onOpenCloseModal.emit(false);
+    // this.isEditMode = false;
+    // this.selectedSchedule = null;
   }
 
   onScheduleCreated(): void {
@@ -145,13 +145,9 @@ export class HorariosComponent implements OnInit {
     );
   }
 
-  onEditSchedule(schedule: any): void {
-    this.openModal(true, schedule);
-  }
-
   onPageSizeChange(newSize: number): void {
     this.pageSize = newSize;
-    this.currentPage = 1; // Reset to first page
+    this.currentPage = 1;
     this.getSchedules();
   }
 }

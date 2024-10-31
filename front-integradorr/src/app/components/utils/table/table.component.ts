@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SharingDataService } from '../../../services/sharing-data.service';
 
 @Component({
@@ -12,18 +12,17 @@ export class TableComponent {
   @Input() columns: { key: string, label: string }[] = [];
   @Input() data: any[] = [];
   @Input() pageSize: number = 10;
-  @Output() edit = new EventEmitter<any>();
+  
 
   constructor(
     private sharingDataService: SharingDataService) { }
 
   onPageSizeChange(event: Event): void {
-    const newSize = (event.target as HTMLSelectElement).value;
-    this.sharingDataService.pageSizeChange.emit(+newSize);
+    const newSize = +(event.target as HTMLSelectElement).value;
+    this.sharingDataService.pageSizeChange.emit(newSize);
   }
 
   onEdit(row: any): void {
-    this.edit.emit(row);
-    console.log('Edit', row);
+    this.sharingDataService.edit.emit(row);
   }
 }

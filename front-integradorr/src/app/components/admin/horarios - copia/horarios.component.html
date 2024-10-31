@@ -67,14 +67,16 @@
     </div>
   </div>
 
-  <app-table [columns]="columns" [data]="schedules" [pageSize]="pageSize" (pageSizeChange)="onPageSizeChange($event)"
-    (edit)="onEditSchedule($event)">
+  <app-table 
+  [columns]="columns" 
+  [data]="schedules" 
+  [pageSize]="pageSize" >
   </app-table>
 
   <app-pagination [totalItems]="totalItems" [currentPage]="currentPage" [pageSize]="pageSize">
   </app-pagination>
 
-  <app-popup [title]="isEditMode ? 'Actualizar Horario' : 'Registrar Horario'" [isOpen]="isModalOpen"
+  <app-popup [title]="isEditMode ? 'Actualizar Horario' : 'Registrar Horario'"
     (close)="closeModal()">
     <app-register-schedule [isEditMode]="isEditMode" [schedule]="selectedSchedule"></app-register-schedule>
   </app-popup>

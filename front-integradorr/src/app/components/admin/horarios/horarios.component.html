@@ -62,36 +62,6 @@
   </div>
 
   <div class="row mb-3">
-    <!-- <div class="col-md-3">
-      <div class="form-group">
-        <label for="anotherFilter1">Otro Filtro 1</label>
-        <input 
-          type="text" 
-          id="anotherFilter1" 
-          class="form-control" 
-          [(ngModel)]="filters.anotherFilter1">
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="form-group">
-        <label for="anotherFilter2">Otro Filtro 2</label>
-        <input 
-          type="text" 
-          id="anotherFilter2" 
-          class="form-control" 
-          [(ngModel)]="filters.anotherFilter2">
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="form-group">
-        <label for="anotherFilter3">Otro Filtro 3</label>
-        <input 
-          type="text" 
-          id="anotherFilter3" 
-          class="form-control" 
-          [(ngModel)]="filters.anotherFilter3">
-      </div>
-    </div> -->
     <div class="col-md-3 d-flex align-items-end">
       <button 
         class="btn btn-secondary w-100" 
@@ -128,19 +98,6 @@
   [pageSize]="pageSize" >
 </app-pagination>
 
-<!-- Modal -->
-<div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': isModalOpen}" [ngStyle]="{'display': isModalOpen ? 'block' : 'none'}">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Registrar Horario</h5>
-        <button type="button" class="close" (click)="closeModal()">
-          <span>&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <app-register-schedule></app-register-schedule>
-      </div>
-    </div>
-  </div>
-</div>
+<app-popup title="Registrar Horario">
+  <app-register-schedule></app-register-schedule>
+</app-popup>

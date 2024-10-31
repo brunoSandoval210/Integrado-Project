@@ -56,8 +56,9 @@ export class RegisterScheduleComponent implements OnInit {
     if (this.scheduleForm.valid) {
       this.scheduleService.createSchedule(this.scheduleForm.value).subscribe(
         response => {
+          console.log('Schedule created successfully', response);
           this.sharingDataService.onScheduleCreated.emit();
-          this.scheduleForm.reset();
+          this.scheduleForm.reset(); // Limpiar el formulario
           Swal.fire({
             icon: 'success',
             title: 'Horario creado',
@@ -73,6 +74,12 @@ export class RegisterScheduleComponent implements OnInit {
           });
         }
       );
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Por favor, complete todos los campos requeridos.'
+      });
     }
   }
 }
