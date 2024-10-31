@@ -1,0 +1,30 @@
+.pagination {
+    .page-item {
+      .page-link {
+        color: #6c757d; /* Color plomo */
+        background-color: #f8f9fa; /* Fondo claro */
+        border: 1px solid #dee2e6;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+  
+        &:hover {
+          background-color: #e2e6ea;
+          color: #495057;
+        }
+      }
+  
+      &.disabled .page-link {
+        color: #6c757d;
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+        cursor: not-allowed;
+      }
+  
+      &.active .page-link {
+        z-index: 1;
+        color: #fff;
+        background-color: #6c757d; /* Color plomo */
+        border-color: #6c757d;
+      }
+    }
+  }

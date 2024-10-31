@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 
@@ -28,6 +28,20 @@ export class UserService {
 
   createUser(user: any) {
     return this.http.post<any>(this.url, user);
+  }
+
+  getUsers(filers:any){
+    let params = new HttpParams();
+    if (filers.page !== undefined) {
+      params = params.set('page', filers.page);
+    }
+    if (filers.size !== undefined) {
+      params = params.set('size', filers.size);
+    }
+    if (filers.roleId !== undefined) {
+      params = params.set('roleId', filers.roleId);
+    }
+    return this.http.get<any>(`${this.url}/todos`, { headers: this.getAuthHeaders(), params: params });
   }
 
   updateUser(user: any) {

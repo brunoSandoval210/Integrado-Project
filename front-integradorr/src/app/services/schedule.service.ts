@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 
@@ -11,8 +11,38 @@ export class ScheduleService {
   constructor(private http: HttpClient,
     private authService: AuthService) { }
 
-  getSchedules() {
-    return this.http.get<any>(this.url,{headers: this.getAuthHeaders()});
+  getSchedules(filters: any) {
+    let params = new HttpParams();
+    if (filters.page !== undefined) {
+      params = params.set('page', filters.page);
+    }
+    if (filters.size !== undefined) {
+      params = params.set('size', filters.size);
+    }
+    if (filters.today !== undefined) {
+      params = params.set('today', filters.today);
+    }
+    if (filters.filterDay !== undefined) {
+      params = params.set('filterDay', filters.filterDay);
+    }
+    if (filters.idUser !== undefined) {
+      params = params.set('idUser', filters.idUser);
+    }
+    if (filters.status !== undefined) {
+      params = params.set('status', filters.status);
+    }
+    if (filters.statusSchedule !== undefined) {
+      params = params.set('statusSchedule', filters.statusSchedule);
+    }
+
+    return this.http.get<any>(`${this.url}/todos`, { headers: this.getAuthHeaders(), params: params });
+  }
+  createSchedule(schedule: any) {
+    return this.http.post<any>(this.url, schedule, { headers: this.getAuthHeaders() });
+  }
+
+  updateSchedule(id: number, schedule: any) {
+    return this.http.put<any>(`${this.url}/${id}`, schedule, { headers: this.getAuthHeaders() });
   }
 
   getUserId() {

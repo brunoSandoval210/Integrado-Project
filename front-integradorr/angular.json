@@ -24,6 +24,7 @@
 							"zone.js"
 						],
 						"tsConfig": "tsconfig.app.json",
+						"inlineStyleLanguage": "scss",
 						"assets": [
 							{
 								"glob": "**/*",
@@ -98,7 +99,7 @@
 							}
 						],
 						"styles": [
-							"src/styles.scss"
+						"src/styles.scss"
 						],
 						"scripts": []
 					}

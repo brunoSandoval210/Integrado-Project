@@ -1,0 +1,19 @@
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" (click)="onPageChange(currentPage - 1)">Anterior</a>
+      </li>
+  
+      @for (page of [].constructor(totalItems / pageSize | ceil); track $index) {
+        <li class="page-item" [class.active]="currentPage === ($index + 1)">
+            <a class="page-link" (click)="onPageChange($index + 1)">{{ $index + 1 }}</a>
+          </li>
+      }
+      
+      <li class="page-item" [class.disabled]="currentPage === (totalItems / pageSize | ceil)">
+        <a class="page-link" (click)="onPageChange(currentPage + 1)">Siguiente</a>
+      </li>
+    </ul>
+    <div class="page-size-selector">
+    </div>
+  </nav>

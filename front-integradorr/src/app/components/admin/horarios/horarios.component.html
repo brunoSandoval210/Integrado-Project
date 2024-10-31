@@ -1,3 +1,146 @@
-<p>horarios works!</p>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="display-4 text-center">
+        <i class="fas fa-calendar-alt"></i> Mantenimiento de Horarios
+      </h1>
+    </div>
+  </div>
 
-<app-table [columns]="columns" [data]="data"></app-table>
+<div class="filters container mt-4">
+  <div class="row mb-3">
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="filterDay">Fecha</label>
+        <input 
+          type="date" 
+          id="filterDay" 
+          class="form-control" 
+          [(ngModel)]="filters.filterDay">
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="idUser">Doctor</label>
+        <select 
+          id="idUser" 
+          class="form-control" 
+          [(ngModel)]="filters.idUser">
+          <option [ngValue]="undefined">Seleccione un usuario</option>
+          <option *ngFor="let user of usersFilter" [value]="user.id">
+            {{ user.name + ' ' + user.lastname + ' - ' + user.specialization.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="statusSchedule">Estado del Horario</label>
+        <select 
+          id="statusSchedule" 
+          class="form-control" 
+          [(ngModel)]="filters.statusSchedule">
+          <option [ngValue]="undefined">Seleccione un estado</option>
+          <option [ngValue]="'LIBRE'">LIBRE</option>
+          <option [ngValue]="'RESERVADO'">RESERVADO</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="status">Estado</label>
+        <select 
+          id="status" 
+          class="form-control" 
+          [(ngModel)]="filters.status">
+          <option [ngValue]="undefined">Todos</option>
+          <option [ngValue]="1">Activos</option>
+          <option [ngValue]="0">Eliminado</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <!-- <div class="col-md-3">
+      <div class="form-group">
+        <label for="anotherFilter1">Otro Filtro 1</label>
+        <input 
+          type="text" 
+          id="anotherFilter1" 
+          class="form-control" 
+          [(ngModel)]="filters.anotherFilter1">
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="anotherFilter2">Otro Filtro 2</label>
+        <input 
+          type="text" 
+          id="anotherFilter2" 
+          class="form-control" 
+          [(ngModel)]="filters.anotherFilter2">
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="anotherFilter3">Otro Filtro 3</label>
+        <input 
+          type="text" 
+          id="anotherFilter3" 
+          class="form-control" 
+          [(ngModel)]="filters.anotherFilter3">
+      </div>
+    </div> -->
+    <div class="col-md-3 d-flex align-items-end">
+      <button 
+        class="btn btn-secondary w-100" 
+        (click)="getSchedules()">
+        Aplicar Filtros
+      </button>
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+      <button 
+        class="btn btn-danger w-100" 
+        (click)="resetFilters()">
+        Limpiar Filtros
+      </button>
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+      <button 
+        class="btn btn-primary w-100" 
+        (click)="openModal()">
+        Registrar Horario
+      </button>
+    </div>
+  </div>
+</div>  
+
+<app-table 
+[columns]="columns" 
+[data]="schedules" 
+[pageSize]="pageSize">
+</app-table>
+
+<app-pagination 
+  [totalItems]="totalItems" 
+  [currentPage]="currentPage" 
+  [pageSize]="pageSize" >
+</app-pagination>
+
+<!-- Modal -->
+<div class="modal" tabindex="-1" role="dialog" [ngClass]="{'show': isModalOpen}" [ngStyle]="{'display': isModalOpen ? 'block' : 'none'}">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Registrar Horario</h5>
+        <button type="button" class="close" (click)="closeModal()">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-register-schedule></app-register-schedule>
+      </div>
+    </div>
+  </div>
+</div>

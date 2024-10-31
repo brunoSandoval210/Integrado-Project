@@ -15,7 +15,7 @@ import { PopupComponent } from '../../utils/popup/popup.component';
 @Component({
   selector: 'app-horarios',
   standalone: true,
-  imports: [TableComponent, 
+  imports: [TableComponent,
     FormsModule,
     CeilPipe,
     PaginationComponent,
@@ -35,7 +35,7 @@ export class HorariosComponent implements OnInit {
   isEditMode: boolean = false;
   selectedSchedule: any = null;
 
-  filters : ScheduleFilters= {
+  filters: ScheduleFilters = {
     page: 0,
     size: 10,
     today: undefined,
@@ -45,10 +45,11 @@ export class HorariosComponent implements OnInit {
     statusSchedule: undefined
   };
 
-  constructor(private scheduleService: ScheduleService,
+  constructor(
+    private scheduleService: ScheduleService,
     private sharingDataService: SharingDataService,
     private userService: UserService
-  ) {}
+  ) { }
 
   columns = [
     { key: 'doctorName', label: 'Nombre del doctor' },
@@ -142,5 +143,15 @@ export class HorariosComponent implements OnInit {
         console.error('Error fetching users', error);
       }
     );
+  }
+
+  onEditSchedule(schedule: any): void {
+    this.openModal(true, schedule);
+  }
+
+  onPageSizeChange(newSize: number): void {
+    this.pageSize = newSize;
+    this.currentPage = 1; // Reset to first page
+    this.getSchedules();
   }
 }

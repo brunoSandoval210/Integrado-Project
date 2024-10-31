@@ -13,13 +13,15 @@ export class TableComponent {
   @Input() data: any[] = [];
   @Input() pageSize: number = 10;
   @Output() edit = new EventEmitter<any>();
+  @Output() pageSizeChange = new EventEmitter<number>();
 
   constructor(
     private sharingDataService: SharingDataService) { }
 
   onPageSizeChange(event: Event): void {
-    const newSize = (event.target as HTMLSelectElement).value;
-    this.sharingDataService.pageSizeChange.emit(+newSize);
+    const newSize = +(event.target as HTMLSelectElement).value;
+    this.pageSizeChange.emit(newSize);
+    this.sharingDataService.pageSizeChange.emit(newSize);
   }
 
   onEdit(row: any): void {
