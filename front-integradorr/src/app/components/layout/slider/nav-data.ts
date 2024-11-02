@@ -9,8 +9,14 @@ export const navbarData = [
     //*********Rutas para el cliente************
     {
         routerLink: '/patient-profile',
-        icon: 'fa fa-user',
-        label: 'Patient Profile',
+        icon: 'fa fa-calendar-check',
+        label: 'Mis citas',
+        roles: ['ROLE_USER']
+    },
+    {
+        routerLink: '/patient/horarios',
+        icon: 'fa fa-calendar-alt',
+        label: 'Horarios disponibles',
         roles: ['ROLE_USER']
     },
     //*********Rutas para el admin************

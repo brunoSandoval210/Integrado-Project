@@ -11,12 +11,15 @@ import { PatientGuard } from './guards/client.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { HorariosComponent } from './components/admin/horarios/horarios.component';
 import { UsuariosComponent } from './components/admin/usuarios/usuarios.component';
+import { SchedulesUserComponent } from './components/client/schedules-user/schedules-user.component';
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
+  //*********Rutas para el doctor********
   { path: 'doctor-profile', component: DoctorProfileComponent,canActivate: [DoctorGuard] },
+  //*********Rutas para el paciente********
   { path: 'patient-profile', component: PatientProfileComponent,canActivate: [PatientGuard] },
-
+  { path: 'patient/horarios', component: SchedulesUserComponent, canActivate: [PatientGuard] },
 
   //*********Rutas para el admin************
   { path: 'admin-profile', component: AdminProfileComponent, canActivate: [AdminGuard] },

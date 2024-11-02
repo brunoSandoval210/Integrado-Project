@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
   private url: string = "http://localhost:8080/auth/login";
+  private userUrl: string = "http://localhost:8080/user/email"; // URL para obtener el usuario por correo electrónico
   private _token!: string | undefined;
   private _user: any = {
     role: '',
@@ -23,6 +24,18 @@ export class AuthService {
 
   loginUser({ username, password }: any): Observable<any> {
     return this.http.post<any>(this.url, { username, password });
+  }
+
+  getByEmail(email: string): Observable<any> {
+    return this.http.get<any>(`${this.userUrl}/${email}`, { headers: this.getAuthHeaders() });
+  }
+
+  getAuthHeaders(): HttpHeaders {
+    const token = this.token;
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
   }
 
   set user(user: any) {
@@ -56,6 +69,16 @@ export class AuthService {
         role: payload.authorities[0], // Asumiendo que solo hay un rol
         isAuth: true
       };
+      // Obtener el usuario por correo electrónico y guardar en la sesión
+      this.getByEmail(payload.sub).subscribe(user => {
+        this.user = {
+          ...this.user,
+          id: user.id,
+          role: user.role,
+          // Agregar cualquier otra información del usuario aquí
+        };
+        sessionStorage.setItem('login', JSON.stringify(this.user));
+      });
       // Imprimir la duración del token
       const expirationDate = new Date(payload.exp * 1000);
       console.log(`Token expires at: ${expirationDate}`);

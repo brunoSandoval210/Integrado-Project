@@ -54,11 +54,12 @@ export class RegisterScheduleComponent implements OnInit {
 
   onSubmit(): void {
     if (this.scheduleForm.valid) {
-      this.scheduleService.createSchedule(this.scheduleForm.value).subscribe(
+      const formData = { ...this.scheduleForm.value };
+      console.log('Form data before sending:', formData); // Agrega esta línea para depurar
+      this.scheduleService.createSchedule(formData).subscribe(
         response => {
           console.log('Schedule created successfully', response);
-          this.sharingDataService.onScheduleCreated.emit();
-          this.scheduleForm.reset(); // Limpiar el formulario
+          this.scheduleForm.reset();
           Swal.fire({
             icon: 'success',
             title: 'Horario creado',

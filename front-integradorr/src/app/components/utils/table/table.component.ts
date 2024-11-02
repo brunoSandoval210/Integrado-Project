@@ -1,21 +1,26 @@
 import { Component, Input } from '@angular/core';
 import { SharingDataService } from '../../../services/sharing-data.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-table',
   standalone: true,
   imports: [],
   templateUrl: './table.component.html',
-  styleUrl: './table.component.scss'
+  styleUrls: ['./table.component.scss']
 })
 export class TableComponent {
   @Input() columns: { key: string, label: string }[] = [];
   @Input() data: any[] = [];
   @Input() pageSize: number = 10;
-  
+  userRole: string = '';
 
   constructor(
-    private sharingDataService: SharingDataService) { }
+    private sharingDataService: SharingDataService,
+    private authService: AuthService
+  ) { 
+    this.userRole = this.authService.user.role.name; // Asegúrate de obtener el nombre del rol correctamente
+  }
 
   onPageSizeChange(event: Event): void {
     const newSize = +(event.target as HTMLSelectElement).value;
@@ -34,9 +39,7 @@ export class TableComponent {
     return status === "1" ? 'Activo' : 'Inactivo';
   }
 
-  // En table.component.ts
   getValue(row: any, key: string): any {
     return key.split('.').reduce((acc, part) => acc && acc[part], row);
   }
-
 }

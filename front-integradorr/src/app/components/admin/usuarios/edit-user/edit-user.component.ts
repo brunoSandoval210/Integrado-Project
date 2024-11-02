@@ -38,7 +38,6 @@ export class EditUserComponent implements OnInit, OnChanges {
     if (this.user) {
       this.setFormValues(this.user);
     }
-    console.log('User', this.user);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
