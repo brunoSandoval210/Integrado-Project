@@ -3,6 +3,7 @@ package com.integrador.back.controllers;
 import com.integrador.back.model.dtos.user.UserCreateRequest;
 import com.integrador.back.model.dtos.user.UserResponse;
 import com.integrador.back.model.dtos.user.UserUpdateRequest;
+import com.integrador.back.model.entities.Specialization;
 import com.integrador.back.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,12 +66,11 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> toggleStatus(@PathVariable Long id) {
         try {
-            String status = userService.toggleStatus(id);
-            return ResponseEntity.status(HttpStatus.OK).body(status);
+            return ResponseEntity.status(HttpStatus.OK).body(userService.toggleStatus(id));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonMap("error", e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.singletonMap("error", "Error inesperado: " + e.getMessage()));
         }
     }
     @GetMapping("/{id}")
@@ -82,13 +83,36 @@ public class UserController {
         }
     }
     @GetMapping("/todos")
-    public ResponseEntity<?> getAllUsers(@RequestParam Long roleId,
+    public ResponseEntity<?> getAllUsers(
                                          @RequestParam(defaultValue = "0") int page,
-                                         @RequestParam(defaultValue = "10") int size){
+                                         @RequestParam(defaultValue = "10") int size,
+                                         @RequestParam(required = false) Long roleId){
         Pageable pageable = PageRequest.of(page, size);
         try {
             Page<UserResponse> users = userService.getAllUsers(roleId, pageable);
             return ResponseEntity.status(HttpStatus.OK).body(users);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/especializaciones")
+    public ResponseEntity<?> getSpecializations(){
+        try {
+            Optional<List<Specialization>> specializations = userService.getAllSpecializations(1);
+            return ResponseEntity.status(HttpStatus.OK).body(specializations);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
+        try {
+            UserResponse userResponse = userService.getUserByEmail(email);
+            return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado: " + e.getMessage());
         }

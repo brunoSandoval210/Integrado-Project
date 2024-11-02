@@ -73,6 +73,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 userRepository.findById(appointmentCreateRequest.getUserId()).orElseThrow(() -> new IllegalArgumentException("No se encontró el usuario con el id: " + appointmentCreateRequest.getUserId())) : null);
         appointment.setSchedule(appointmentCreateRequest.getScheduleId() != null ?
                 scheduleRepository.findById(appointmentCreateRequest.getScheduleId()).orElseThrow(() -> new IllegalArgumentException("No se encontró el horario con el id: " + appointmentCreateRequest.getScheduleId())) : null);
+        appointment.getSchedule().setStatusSchedule("RESERVADO");
         appointment.setStatus(1);
         appointment = appointmentRepository.save(appointment);
         AppointmentResponse appointmentResponse = modelMapper.map(appointment, AppointmentResponse.class);

@@ -18,11 +18,11 @@ public interface ScheduleRepository extends JpaRepository<Schedule,Long> {
     @Query("select s from Schedule s " +
             "where (:status is null or s.status = :status) " +
             "and (:statusSchedule is null or s.statusSchedule like lower(:statusSchedule)) " +
-            "and (:today is null or s.dateRegister >= :today) " +
+            "and (:today is null or s.date >= :today) " +
             "and (:filterDay is null or s.date = :filterDay) " +
             "and (:idUser is null or s.user.id = :idUser)")
     Page<Schedule> findSchedules(Pageable pageable,
-                                 @Param("today") LocalDateTime today,
+                                 @Param("today") LocalDate today,
                                  @Param("filterDay") LocalDate filterDay,
                                  @Param("idUser") Long idUser,
                                  @Param("status") Integer status,

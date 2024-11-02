@@ -1,6 +1,7 @@
 package com.integrador.back.services.impl;
 
 import com.integrador.back.model.dtos.user.*;
+import com.integrador.back.model.entities.Specialization;
 import com.integrador.back.model.entities.User;
 import com.integrador.back.repositories.RoleRepository;
 import com.integrador.back.repositories.SpecializationRepository;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -71,10 +74,12 @@ public class UserServiceImpl implements UserService {
                 roleRepository.findById(userUpdate.getRole())
                         .orElseThrow(()->new IllegalArgumentException("No se encontró el rol: "+userUpdate.getRole()))
                 :null);
-        userOptional.setSpecialization(userOptional.getSpecialization() != null?
-                specializationRepository.findById(userUpdate.getSpecialization())
-                        .orElseThrow(()->new IllegalArgumentException("La especialización ingresada no existe"))
-                :null);
+        if (userUpdate.getSpecialization() != null) {
+            userOptional.setSpecialization(specializationRepository.findById(userUpdate.getSpecialization())
+                    .orElseThrow(() -> new IllegalArgumentException("La especialización ingresada no existe")));
+        } else {
+            userOptional.setSpecialization(null);
+        }
         userOptional.setUsername(userUpdate.getEmail());
 
         userOptional.setNumberTuition(userUpdate.getNumberTuition() != null
@@ -88,12 +93,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String toggleStatus(Long id) {
+    public Map<String, String> toggleStatus(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No se encontró el usuario con el id: " + id));
         user.setStatus(user.getStatus() == 0?1:0 == 1?1:0);
         userRepository.save(user);
-        return "Se cambió el estado a " + (user.getStatus() == 1 ? "ACTIVO" : "INACTIVO");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", user.getStatus() == 1 ? "Se activo el usuario" : "Se elimino el usuario");
+        return response;
     }
 
     @Transactional(readOnly = true)
@@ -137,7 +144,13 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public Page<UserResponse> getAllUsers(Long roleId, Pageable pageable) {
-        Page<User> users = userRepository.findAll(pageable, roleId);
+        Page<User> users;
+        if (roleId == 0 || roleId == null) {
+            users = userRepository.findAll(pageable);
+        } else {
+            users = userRepository.findAll(pageable, roleId);
+        }
+
         Page<UserResponse> userResponses = users.map(user -> {
             // Mapear User a UserResponse
             UserResponse userResponse = modelMapper.map(user, UserResponse.class);
@@ -161,7 +174,7 @@ public class UserServiceImpl implements UserService {
                 // Setear la lista de AppointmentResponse en UserResponse
                 userResponse.setAppointments(appointmentResponses);
             }
-            if (roleId == 3){
+            if (roleId == 3) {
                 List<ScheduleResponse> scheduleResponses = user.getSchedules().stream()
                         .map(schedule -> {
                             ScheduleResponse scheduleResponse = modelMapper.map(schedule, ScheduleResponse.class);
@@ -177,4 +190,44 @@ public class UserServiceImpl implements UserService {
         return userResponses;
     }
 
+    @Transactional(readOnly = true)
+    public Optional<List<Specialization>> getAllSpecializations(Integer status) {
+        return Optional.of(specializationRepository.findAllByStatus(status));
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponse getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró el usuario : " + email));
+        UserResponse userResponse = modelMapper.map(user, UserResponse.class);
+
+        if (user.getRole() != null && user.getRole().getId() == 2) {
+            userResponse.setAppointments(mapAppointments(user));
+        }
+
+        if (user.getRole() != null && user.getRole().getId() == 3) {
+            userResponse.setSchedules(mapSchedules(user));
+        }
+
+        return userResponse;
+    }
+
+    private List<AppointmentResponse> mapAppointments(User user) {
+        return user.getAppointments().stream()
+                .map(appointment -> {
+                    AppointmentResponse appointmentResponse = modelMapper.map(appointment, AppointmentResponse.class);
+                    ScheduleAppointmentResponse scheduleResponse = modelMapper.map(appointment.getSchedule(), ScheduleAppointmentResponse.class);
+                    scheduleResponse.setDoctorName(appointment.getSchedule().getUser().getName() + " " + appointment.getSchedule().getUser().getLastname());
+                    scheduleResponse.setSpecialty(appointment.getSchedule().getUser().getSpecialization().getName());
+                    appointmentResponse.setSchedule(scheduleResponse);
+                    return appointmentResponse;
+                })
+                .collect(Collectors.toList());
+    }
+
+    private List<ScheduleResponse> mapSchedules(User user) {
+        return user.getSchedules().stream()
+                .map(schedule -> modelMapper.map(schedule, ScheduleResponse.class))
+                .collect(Collectors.toList());
+    }
 }

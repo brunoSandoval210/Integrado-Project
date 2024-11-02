@@ -8,20 +8,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 public interface ScheduleService {
     Page<ScheduleAppointmentResponse> getSchedulesAll(
                                                 Pageable pageable,
-                                                LocalDateTime today,
+                                                LocalDate today,
                                                 LocalDate filterDay,
                                                 Long idUser,
                                                 Integer status,
                                                 String statusSchedule);
 
     Optional<ScheduleAppointmentResponse> saveSchedule(ScheduleCreateRequest scheduleCreateRequest);
-
-    String toggleStatus(Long id);
+    Map<String, String> toggleStatus(Long id);
     Optional<ScheduleAppointmentResponse> updateSchedule(ScheduleUpdateRequest scheduleUpdateRequest, Long id);
 }

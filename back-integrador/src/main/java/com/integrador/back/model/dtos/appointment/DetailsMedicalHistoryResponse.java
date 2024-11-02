@@ -5,5 +5,5 @@ import lombok.Data;
 
 @Data
 public class DetailsMedicalHistoryResponse {
-    String detalle;
+    private String detalle;
 }

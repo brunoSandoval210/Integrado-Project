@@ -22,6 +22,11 @@ public class ModelMapperConfig {
                 return source != null ? Integer.valueOf(source) : null;
             }
         });
+
+        modelMapper.getConfiguration().setPropertyCondition(context ->
+                !(context.getSource() instanceof org.hibernate.collection.spi.PersistentBag)
+        );
+
         return modelMapper;
     }
 }
