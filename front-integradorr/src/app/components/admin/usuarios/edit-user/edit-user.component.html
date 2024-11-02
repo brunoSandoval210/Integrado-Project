@@ -1,0 +1,81 @@
+<div class="container mt-4">
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Nombre</label>
+      <input id="name" type="text" class="form-control" formControlName="name" 
+      >
+      <!-- [ngClass]="{'is-invalid': userForm.get('name')?.invalid && userForm.get('name')?.touched}" -->
+      <!-- <div *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched" class="invalid-feedback">
+        Nombre es requerido y solo puede contener letras y espacios
+      </div> -->
+    </div>
+    <div class="form-group">
+      <label for="lastname">Apellido</label>
+      <input id="lastname" type="text" class="form-control" formControlName="lastname"
+      >
+      <!-- [ngClass]="{'is-invalid': userForm.get('lastname')?.invalid && userForm.get('lastname')?.touched}" -->
+      <!-- <div *ngIf="userForm.get('lastname')?.invalid && userForm.get('lastname')?.touched" class="invalid-feedback">
+        Apellido es requerido y solo puede contener letras y espacios
+      </div> -->
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" class="form-control" formControlName="email" 
+      >
+      <!-- [ngClass]="{'is-invalid': userForm.get('email')?.invalid && userForm.get('email')?.touched}"
+      <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="invalid-feedback">
+        El email debe tener un formato válido
+      </div> -->
+    </div>
+    <div class="form-group">
+      <label for="dni">DNI</label>
+      <input id="dni" type="text" class="form-control" formControlName="dni" 
+      >
+      <!-- [ngClass]="{'is-invalid': userForm.get('dni')?.invalid && userForm.get('dni')?.touched}"
+      <div *ngIf="userForm.get('dni')?.invalid && userForm.get('dni')?.touched" class="invalid-feedback">
+        DNI es requerido y debe tener 8 dígitos
+      </div> -->
+    </div>
+    <div class="form-group">
+      <label for="role">Rol</label>
+      <select id="role" class="form-control" formControlName="role" 
+      >
+      <option [ngValue]="null">Seleccione un rol</option>
+      <option [ngValue]="1">Admin</option>
+      <option [ngValue]="3">Doctor</option>
+      <option [ngValue]="2">Paciente</option>
+    </select>
+    <!-- [ngClass]="{'is-invalid': userForm.get('role')?.invalid && userForm.get('role')?.touched}"
+      <div *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched" class="invalid-feedback">
+        Rol es requerido
+      </div> -->
+    </div>
+    <div class="form-group">
+      <label for="specialization">Especialización</label>
+      <select id="specialization" class="form-control" formControlName="specialization" 
+      >
+      <option [ngValue]=null>Seleccione una especialización</option>
+      <option *ngFor="let specialization of specializations" [value]="specialization.id">
+        {{ specialization.name }}
+      </option>
+    </select>
+    <!-- [ngClass]="{'is-invalid': userForm.get('specialization')?.invalid && userForm.get('specialization')?.touched}"
+      <div *ngIf="userForm.get('specialization')?.invalid && userForm.get('specialization')?.touched" class="invalid-feedback">
+        Especialización es requerida para el rol de Doctor
+      </div> -->
+    </div>
+    <div class="form-group">
+      <label for="status">Estado</label>
+      <select id="status" class="form-control" formControlName="status" 
+      >
+      <option [ngValue]="'1'">Activo</option>
+      <option [ngValue]="'0'">Inactivo</option>
+    </select>
+    <!-- [ngClass]="{'is-invalid': userForm.get('status')?.invalid && userForm.get('status')?.touched}"
+      <div *ngIf="userForm.get('status')?.invalid && userForm.get('status')?.touched" class="invalid-feedback">
+        Estado es requerido
+      </div> -->
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Actualizar Usuario</button>
+  </form>
+</div>

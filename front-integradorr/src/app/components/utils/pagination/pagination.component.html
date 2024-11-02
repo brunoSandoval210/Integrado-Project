@@ -8,8 +8,7 @@
         <li class="page-item" [class.active]="currentPage === ($index + 1)">
             <a class="page-link" (click)="onPageChange($index + 1)">{{ $index + 1 }}</a>
           </li>
-      }
-      
+      }     
       <li class="page-item" [class.disabled]="currentPage === (totalItems / pageSize | ceil)">
         <a class="page-link" (click)="onPageChange(currentPage + 1)">Siguiente</a>
       </li>

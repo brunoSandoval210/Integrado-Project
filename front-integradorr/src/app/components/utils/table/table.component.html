@@ -22,13 +22,15 @@
             @for (column of columns; track $index) {
             <td>
                 @if (column.key !== 'actions') {
-                {{ row[column.key] }}
+                {{ column.key === 'status' ? transformStatus(row[column.key]) : getValue(row, column.key) || 'N/A' }}
+
                 } @else {
                 <button type="button" class="btn btn-warning btn-sm me-2" (click)="onEdit(row)">
                     <i class="fas fa-edit"></i>
-                    </button>
+                </button>
                 <button type="button" class="btn btn-danger btn-sm">
-                    <i class="fas fa-trash"></i> </button>
+                    <i class="fas fa-trash" (click)="onDelete(row)"></i>
+                </button>
                 }
             </td>
             }

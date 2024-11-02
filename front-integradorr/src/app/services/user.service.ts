@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -30,21 +31,33 @@ export class UserService {
     return this.http.post<any>(this.url, user);
   }
 
-  getUsers(filers:any){
+  getUsers(filters: any): Observable<any> {
     let params = new HttpParams();
-    if (filers.page !== undefined) {
-      params = params.set('page', filers.page);
+    if (filters.page !== undefined) {
+      params = params.set('page', filters.page);
     }
-    if (filers.size !== undefined) {
-      params = params.set('size', filers.size);
+    if (filters.size !== undefined) {
+      params = params.set('size', filters.size);
     }
-    if (filers.roleId !== undefined) {
-      params = params.set('roleId', filers.roleId);
+    if (filters.roleId !== undefined && filters.roleId !== null) {
+      params = params.set('roleId', filters.roleId);
     }
-    return this.http.get<any>(`${this.url}/todos`, { headers: this.getAuthHeaders(), params: params });
+    return this.http.get<any>(`${this.url}/todos`, { params: params });
   }
 
-  updateUser(user: any) {
-    return this.http.put<any>(`${this.url}/${this.getUserId()}`, user, { headers: this.getAuthHeaders() });
+  updateUser(id:number,user: any) {
+    return this.http.put<any>(`${this.url}/${id}`, user, { headers: this.getAuthHeaders() });
+  }
+
+  deleteUser(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.url}/${id}`,{ headers: this.getAuthHeaders() });
+  }
+
+  getById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.url}/${id}`,{ headers: this.getAuthHeaders() });
+  }
+
+  getSpecializacionsDoctor(): Observable<any> {
+    return this.http.get<any>(`${this.url}/especializaciones`,{ headers: this.getAuthHeaders() });
   }
 }

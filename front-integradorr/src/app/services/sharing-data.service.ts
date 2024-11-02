@@ -18,7 +18,10 @@ export class SharingDataService {
   private _onScheduleUpdate = new EventEmitter<void>();
   //Evento para manejar el abrir y cerrar del modal
   private _onOpenCloseModal = new EventEmitter<boolean>();
+  //Evento para manejar la educion
   private _edit = new EventEmitter<any>()
+  //Evento para manejar la eliminacion
+  private _delete = new EventEmitter<any>();
 
   get onToggleSideNav(): EventEmitter<SideNavToggle> {
     return this._onToggleSideNav;
@@ -46,5 +49,9 @@ export class SharingDataService {
 
   get edit(): EventEmitter<any> {
     return this._edit;
+  }
+
+  get delete(): EventEmitter<any> {
+    return this._delete;
   }
 }

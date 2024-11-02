@@ -16,8 +16,14 @@ export const navbarData = [
     //*********Rutas para el admin************
     {
         routerLink: '/admin-profile',
-        icon: 'fa fa-user-secret',
+        icon: 'fa fa-tachometer-alt',
         label: 'Admin Profile',
+        roles: ['ROLE_ADMIN']
+    },
+    {
+        routerLink: '/admin/usuarios',
+        icon: 'fa fa-users',
+        label: 'Usuarios',
         roles: ['ROLE_ADMIN']
     },
     {
@@ -26,11 +32,5 @@ export const navbarData = [
         label: 'Horarios',
         roles: ['ROLE_ADMIN']
     },
-    {
-        routerLink: '/admin/usuarios',
-        icon: 'fa fa-users',
-        label: 'Usuarios',
-        roles: ['ROLE_ADMIN']
-    }
 
 ]

@@ -1,1 +1,62 @@
-<p>usuarios works!</p>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="display-4 text-center">
+        <i class="fas fa-users"></i> Mantenimiento de Usuarios
+      </h1>
+    </div>
+  </div>
+
+  <div class="filters container mt-4">
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="roleId">Rol</label>
+          <select id="roleId" class="form-control" [(ngModel)]="filters.roleId">
+            <option [ngValue]="0">Seleccione un rol</option>
+            <option [ngValue]="1">Admin</option>
+            <option [ngValue]="3">Doctor</option>
+            <option [ngValue]="2">Paciente</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="status">Estado</label>
+          <select id="status" class="form-control">
+            <!-- [(ngModel)]="filters.status" -->
+            <option [ngValue]="0">Todos</option>
+            <option [ngValue]="1">Activo</option>
+            <option [ngValue]="2">Inactivo</option>
+          </select>
+        </div>
+      </div>
+      <!-- Puedes agregar más filtros aquí si es necesario -->
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-3 d-flex align-items-end">
+        <button class="btn btn-secondary w-100" (click)="getUsers()">Aplicar Filtros</button>
+      </div>
+      <div class="col-md-3 d-flex align-items-end">
+        <button class="btn btn-danger w-100" (click)="resetFilters()">Limpiar Filtros</button>
+      </div>
+      <div class="col-md-3 d-flex align-items-end">
+        <button class="btn btn-primary w-100" (click)="openModal()">Registrar Horario</button>
+      </div>
+    </div>
+  </div>
+
+  <app-table [columns]="columns" [data]="users" [pageSize]="pageSize">
+  </app-table>
+
+  <app-pagination [totalItems]="totalItems" [currentPage]="currentPage" [pageSize]="pageSize">
+  </app-pagination>
+
+  <app-popup [title]="isEditMode ? 'Actualizar Usuario' : 'Registrar Usuario'">
+    @if(isEditMode) {
+    <app-edit-user [user]="selectedUser"></app-edit-user>
+    } @else {
+    <app-register-user></app-register-user>
+    }
+  </app-popup>
+</div>

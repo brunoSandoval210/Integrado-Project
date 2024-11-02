@@ -10,7 +10,10 @@ export class User{
 }
 
 
-
+export class UserFilters{
+    roleId!: any;
+    // status!: number;
+  };
 // {
 //     "name": "Rosa",
 //     "lastname": "Mendez",

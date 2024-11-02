@@ -7,10 +7,11 @@ import { PaginationComponent } from '../../utils/pagination/pagination.component
 import { SharingDataService } from '../../../services/sharing-data.service';
 import { ScheduleFilters } from '../../../models/schedule';
 import { CommonModule } from '@angular/common';
-import { RegisterScheduleComponent } from './popups/register-schedule/register-schedule.component';
+import { RegisterScheduleComponent } from './register-schedule/register-schedule.component';
 import { UserService } from '../../../services/user.service';
 import Swal from 'sweetalert2';
 import { PopupComponent } from '../../utils/popup/popup.component';
+import { EditScheduleComponent } from './edit-schedule/edit-schedule.component';
 
 @Component({
   selector: 'app-horarios',
@@ -21,6 +22,7 @@ import { PopupComponent } from '../../utils/popup/popup.component';
     PaginationComponent,
     CommonModule,
     RegisterScheduleComponent,
+    EditScheduleComponent,
     PopupComponent],
   templateUrl: './horarios.component.html',
   styleUrls: ['./horarios.component.scss']
@@ -37,7 +39,7 @@ export class HorariosComponent implements OnInit {
 
   filters : ScheduleFilters= {
     page: 0,
-    size: 10,
+    size: this.pageSize,
     today: undefined,
     filterDay: undefined,
     idUser: undefined,
@@ -45,7 +47,8 @@ export class HorariosComponent implements OnInit {
     statusSchedule: undefined
   };
 
-  constructor(private scheduleService: ScheduleService,
+  constructor(
+    private scheduleService: ScheduleService,
     private sharingDataService: SharingDataService,
     private userService: UserService
   ) {}
@@ -67,16 +70,22 @@ export class HorariosComponent implements OnInit {
       this.getSchedules();
     });
     this.sharingDataService.pageSizeChange.subscribe(newSize => {
-      this.pageSize = newSize;
+      this.filters.size = newSize; // Sincroniza filters.size con pageSize
       this.currentPage = 1;
       this.getSchedules();
     });
     this.sharingDataService.onScheduleCreated.subscribe(() => {
       this.onScheduleCreated();
     });
-    // this.sharingDataService.edit.subscribe(schedule =>{
-    //   this.openModal(true, schedule);
-    // });
+    this.sharingDataService.onScheduleUpdate.subscribe(() => {
+      this.onScheduleUpdated();
+    });
+    this.sharingDataService.edit.subscribe(schedule => {
+      this.openModal(true, schedule);
+    });
+    this.sharingDataService.delete.subscribe(schedule => {
+      this.onDeleteSchedule(schedule);
+    });
     this.getUsers();
   }
 
@@ -97,7 +106,7 @@ export class HorariosComponent implements OnInit {
   resetFilters(): void {
     this.filters = {
       page: 0,
-      size: 10,
+      size: this.pageSize,
       today: undefined,
       filterDay: undefined,
       idUser: undefined,
@@ -107,13 +116,16 @@ export class HorariosComponent implements OnInit {
     this.getSchedules();
   }
 
-  openModal(): void {
+  openModal(editMode: boolean = false, schedule: any = null): void {
+    this.isEditMode = editMode;
+    this.selectedSchedule = schedule;
     this.sharingDataService.onOpenCloseModal.emit(true);
-
   }
 
   closeModal(): void {
     this.sharingDataService.onOpenCloseModal.emit(false);
+    this.isEditMode = false;
+    this.selectedSchedule = null;
   }
 
   onScheduleCreated(): void {
@@ -123,6 +135,16 @@ export class HorariosComponent implements OnInit {
       icon: 'success',
       title: 'Horario creado',
       text: 'El horario ha sido creado exitosamente.'
+    });
+  }
+
+  onScheduleUpdated(): void {
+    this.closeModal();
+    this.getSchedules();
+    Swal.fire({
+      icon: 'success',
+      title: 'Horario actualizado',
+      text: 'El horario ha sido actualizado exitosamente.'
     });
   }
 
@@ -136,7 +158,6 @@ export class HorariosComponent implements OnInit {
       data => {
         this.usersFilter = data.content;
         this.totalItems = data.totalElements;
-        console.log('Users:', this.usersFilter);
       },
       error => {
         console.error('Error fetching users', error);
@@ -148,5 +169,39 @@ export class HorariosComponent implements OnInit {
     this.pageSize = newSize;
     this.currentPage = 1;
     this.getSchedules();
+  }
+
+  onDeleteSchedule(schedule: any): void {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¡No podrás revertir esto!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.scheduleService.deleteSchedule(schedule.id).subscribe(
+          response => {
+            console.log('Delete response:', response); // Verificar la respuesta del servidor
+            Swal.fire(
+              'Eliminado!',
+              response.message, // Mostrar el mensaje del servidor
+              'success'
+            );
+            this.getSchedules(); // Actualizar la lista después de la eliminación
+          },
+          error => {
+            console.error('Error deleting schedule:', error); // Verificar el error
+            Swal.fire(
+              'Error!',
+              'Hubo un problema al eliminar el horario.',
+              'error'
+            );
+          }
+        );
+      }
+    });
   }
 }

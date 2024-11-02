@@ -1,6 +1,6 @@
-import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SharingDataService } from '../../../services/sharing-data.service';
 import { navbarData } from './nav-data';
@@ -13,7 +13,11 @@ import { navbarData } from './nav-data';
   styleUrls: ['./slider.component.scss']
 })
 export class SliderComponent implements OnInit {
-  constructor(public authService: AuthService, private sharingDataService: SharingDataService) { }
+  constructor(
+    public authService: AuthService, 
+    private sharingDataService: SharingDataService,
+    private router: Router
+  ) { }
 
   screenWidth = 0;
   collapse = false;
@@ -50,5 +54,10 @@ export class SliderComponent implements OnInit {
   closeSidenav(): void {
     this.collapse = false;
     this.sharingDataService.onToggleSideNav.emit({ collapse: this.collapse, screenWidth: this.screenWidth });
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

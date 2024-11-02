@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ScheduleService } from '../../../../../services/schedule.service';
-import { UserService } from '../../../../../services/user.service';
-import { SharingDataService } from '../../../../../services/sharing-data.service';
+import { ScheduleService } from '../../../../services/schedule.service';
+import { UserService } from '../../../../services/user.service';
+import { SharingDataService } from '../../../../services/sharing-data.service';
 import Swal from 'sweetalert2';
 
 @Component({

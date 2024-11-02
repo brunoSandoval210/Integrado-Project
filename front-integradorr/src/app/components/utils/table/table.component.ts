@@ -25,4 +25,18 @@ export class TableComponent {
   onEdit(row: any): void {
     this.sharingDataService.edit.emit(row);
   }
+
+  onDelete(row: any): void {
+    this.sharingDataService.delete.emit(row);
+  }
+
+  transformStatus(status: string): string {
+    return status === "1" ? 'Activo' : 'Inactivo';
+  }
+
+  // En table.component.ts
+  getValue(row: any, key: string): any {
+    return key.split('.').reduce((acc, part) => acc && acc[part], row);
+  }
+
 }

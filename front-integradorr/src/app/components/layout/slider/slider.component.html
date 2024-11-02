@@ -1,8 +1,10 @@
   <div class="sidenav" [ngClass]="collapse ? 'sidenav-collapse' : ''">
     <div class="logo-container">
-      <button class="logo" (click)="toggleCollapse()">A</button>
+      <button class="logo" (click)="toggleCollapse()">
+        <img src="asents/img/LogoS.png" alt="Logo" class="img-fluid" style="max-height: 50px;">
+      </button>
       @if(collapse){
-        <div class="logo-text">angular</div>
+        <div class="logo-text">Clinica Vallejo</div>
         <button class="btn-close" (click)="closeSidenav()">
           <i class="fal fa-times close-icon"></i>
         </button>
@@ -22,5 +24,13 @@
           </a>
         </li>
       }
+      <li class="sidenav-nav-item">
+        <a class="sidenav-nav-link" (click)="logout()">
+          <i class="fa fa-sign-out-alt"></i>
+          @if (collapse) {
+            <span class="sidenav-link-text">Cerrar Sesión</span>
+          }
+        </a>
+      </li>
     </ul>
   </div>

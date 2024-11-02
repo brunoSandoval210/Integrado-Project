@@ -7,97 +7,77 @@
     </div>
   </div>
 
-<div class="filters container mt-4">
-  <div class="row mb-3">
-    <div class="col-md-3">
-      <div class="form-group">
-        <label for="filterDay">Fecha</label>
-        <input 
-          type="date" 
-          id="filterDay" 
-          class="form-control" 
-          [(ngModel)]="filters.filterDay">
+  <div class="filters container mt-4">
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="filterDay">Fecha</label>
+          <input type="date" id="filterDay" class="form-control" [(ngModel)]="filters.filterDay">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="idUser">Doctor</label>
+          <select id="idUser" class="form-control" [(ngModel)]="filters.idUser">
+            <option [ngValue]="undefined">Seleccione un usuario</option>
+            <option *ngFor="let user of usersFilter" [value]="user.id">
+              {{ user.name + ' ' + user.lastname + ' - ' + user.specialization.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="statusSchedule">Estado del Horario</label>
+          <select id="statusSchedule" class="form-control" [(ngModel)]="filters.statusSchedule">
+            <option [ngValue]="undefined">Seleccione un estado</option>
+            <option [ngValue]="'LIBRE'">LIBRE</option>
+            <option [ngValue]="'RESERVADO'">RESERVADO</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="form-group">
+          <label for="status">Estado</label>
+          <select id="status" class="form-control" [(ngModel)]="filters.status">
+            <option [ngValue]="undefined">Todos</option>
+            <option [ngValue]="1">Activos</option>
+            <option [ngValue]="0">Eliminado</option>
+          </select>
+        </div>
       </div>
     </div>
-    <div class="col-md-3">
-      <div class="form-group">
-        <label for="idUser">Doctor</label>
-        <select 
-          id="idUser" 
-          class="form-control" 
-          [(ngModel)]="filters.idUser">
-          <option [ngValue]="undefined">Seleccione un usuario</option>
-          <option *ngFor="let user of usersFilter" [value]="user.id">
-            {{ user.name + ' ' + user.lastname + ' - ' + user.specialization.name }}
-          </option>
-        </select>
+
+    <div class="row mb-3">
+      <div class="col-md-3 d-flex align-items-end">
+        <button class="btn btn-secondary w-100" (click)="getSchedules()">
+          Aplicar Filtros
+        </button>
       </div>
-    </div>
-    <div class="col-md-3">
-      <div class="form-group">
-        <label for="statusSchedule">Estado del Horario</label>
-        <select 
-          id="statusSchedule" 
-          class="form-control" 
-          [(ngModel)]="filters.statusSchedule">
-          <option [ngValue]="undefined">Seleccione un estado</option>
-          <option [ngValue]="'LIBRE'">LIBRE</option>
-          <option [ngValue]="'RESERVADO'">RESERVADO</option>
-        </select>
+      <div class="col-md-3 d-flex align-items-end">
+        <button class="btn btn-danger w-100" (click)="resetFilters()">
+          Limpiar Filtros
+        </button>
       </div>
-    </div>
-    <div class="col-md-3">
-      <div class="form-group">
-        <label for="status">Estado</label>
-        <select 
-          id="status" 
-          class="form-control" 
-          [(ngModel)]="filters.status">
-          <option [ngValue]="undefined">Todos</option>
-          <option [ngValue]="1">Activos</option>
-          <option [ngValue]="0">Eliminado</option>
-        </select>
+      <div class="col-md-3 d-flex align-items-end">
+        <button class="btn btn-primary w-100" (click)="openModal()">
+          Registrar Horario
+        </button>
       </div>
     </div>
   </div>
 
-  <div class="row mb-3">
-    <div class="col-md-3 d-flex align-items-end">
-      <button 
-        class="btn btn-secondary w-100" 
-        (click)="getSchedules()">
-        Aplicar Filtros
-      </button>
-    </div>
-    <div class="col-md-3 d-flex align-items-end">
-      <button 
-        class="btn btn-danger w-100" 
-        (click)="resetFilters()">
-        Limpiar Filtros
-      </button>
-    </div>
-    <div class="col-md-3 d-flex align-items-end">
-      <button 
-        class="btn btn-primary w-100" 
-        (click)="openModal()">
-        Registrar Horario
-      </button>
-    </div>
-  </div>
-</div>  
+  <app-table [columns]="columns" [data]="schedules" [pageSize]="pageSize">
+  </app-table>
 
-<app-table 
-[columns]="columns" 
-[data]="schedules" 
-[pageSize]="pageSize">
-</app-table>
+  <app-pagination [totalItems]="totalItems" [currentPage]="currentPage" [pageSize]="pageSize">
+  </app-pagination>
 
-<app-pagination 
-  [totalItems]="totalItems" 
-  [currentPage]="currentPage" 
-  [pageSize]="pageSize" >
-</app-pagination>
-
-<app-popup title="Registrar Horario">
-  <app-register-schedule></app-register-schedule>
-</app-popup>
+  <app-popup [title]="isEditMode ? 'Actualizar Horario' : 'Registrar Horario'">
+    @if(isEditMode) {
+    <app-edit-schedule [schedule]="selectedSchedule"></app-edit-schedule>
+    } @else {
+    <app-register-schedule></app-register-schedule>
+    }
+  </app-popup>
+</div>

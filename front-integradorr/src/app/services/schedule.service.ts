@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,10 @@ export class ScheduleService {
 
   updateSchedule(id: number, schedule: any) {
     return this.http.put<any>(`${this.url}/${id}`, schedule, { headers: this.getAuthHeaders() });
+  }
+
+  deleteSchedule(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.url}/${id}`);
   }
 
   getUserId() {
