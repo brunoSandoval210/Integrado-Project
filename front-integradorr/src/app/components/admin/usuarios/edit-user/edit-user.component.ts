@@ -38,6 +38,15 @@ export class EditUserComponent implements OnInit, OnChanges {
     if (this.user) {
       this.setFormValues(this.user);
     }
+
+    this.userForm.get('role')?.valueChanges.subscribe(value => {
+      if (value === 3) { // 3 es el ID del rol Doctor
+        this.userForm.get('specialization')?.setValidators([Validators.required]);
+      } else {
+        this.userForm.get('specialization')?.clearValidators();
+      }
+      this.userForm.get('specialization')?.updateValueAndValidity();
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -55,6 +64,12 @@ export class EditUserComponent implements OnInit, OnChanges {
       role: user.role.id,
       specialization: user.specialization ? user.specialization.id : null,
       status: user.status
+    });
+    // Marcar todos los campos como "touched" para que se consideren válidos
+    Object.keys(this.userForm.controls).forEach(field => {
+      const control = this.userForm.get(field);
+      control?.markAsTouched({ onlySelf: true });
+      control?.markAsDirty({ onlySelf: true });
     });
   }
 

@@ -43,6 +43,12 @@ export class RegisterUserComponent implements OnInit {
       }
       this.userForm.get('specialization')?.updateValueAndValidity();
     });
+
+    this.sharingDataService.onOpenCloseModal.subscribe((isOpen: boolean) => {
+      if (isOpen) {
+        this.userForm.reset();
+      }
+    });
   }
 
   getSpecializations(): void {
@@ -64,6 +70,7 @@ export class RegisterUserComponent implements OnInit {
           console.log('User created successfully', response);
           this.sharingDataService.onScheduleCreated.emit();
           this.userForm.reset(); // Limpiar el formulario
+          this.sharingDataService.onOpenCloseModal.emit(false); // Cerrar el modal
           Swal.fire({
             icon: 'success',
             title: 'Usuario creado',
@@ -86,5 +93,9 @@ export class RegisterUserComponent implements OnInit {
         text: 'Por favor, complete todos los campos requeridos.'
       });
     }
+  }
+
+  resetForm(): void {
+    this.userForm.reset();
   }
 }

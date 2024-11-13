@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -15,28 +16,37 @@ export class LoginComponent {
   password: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
-
+  
   onSubmit() {
     this.authService.loginUser({ username: this.username, password: this.password }).subscribe(
       response => {
         if (response && response.token) {
           this.authService.token = response.token;
+          Swal.fire({
+            icon: 'success',
+            title: 'Inicio de sesión exitoso',
+            text: 'Bienvenido de nuevo'
+          });
           this.redirectUser();
         } else {
           console.error('Invalid login response', response);
-          // Maneja el error de login aquí
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al iniciar sesión',
+            text: 'Respuesta de inicio de sesión inválida'
+          });
         }
       },
       error => {
-        console.error('Login failed', error);
-        if (error.status === 403) {
-          alert('Credenciales incorrectas. Por favor, inténtelo de nuevo.');
-        } else {
-          alert('Error al iniciar sesión. Por favor, inténtelo de nuevo más tarde.');
-        }
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al iniciar sesión',
+          text: 'Usuario o contraseña incorrectos'
+        });
       }
     );
   }
+
   redirectUser() {
     const role = this.authService.user.role;
     if (role === 'ROLE_ADMIN') {
