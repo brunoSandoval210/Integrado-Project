@@ -1,11 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private userSubject = new BehaviorSubject<any>(null); // Subject para notificar cambios
+  user$ = this.userSubject.asObservable(); // Observable para que otros componentes se suscriban
+
   private url: string = "http://localhost:8080/auth/login";
   private userUrl: string = "http://localhost:8080/user/email"; // URL para obtener el usuario por correo electrónico
   private _token!: string | undefined;
@@ -40,10 +43,11 @@ export class AuthService {
 
   set user(user: any) {
     this._user = user;
-    this._user.isAuth = true; // Asegúrate de marcar el usuario como autenticado
+    this._user.isAuth = true;
     if (this.isBrowser()) {
       sessionStorage.setItem('login', JSON.stringify(user));
     }
+    this.userSubject.next(this._user); // Notifica a los suscriptores
   }
 
   get user() {
