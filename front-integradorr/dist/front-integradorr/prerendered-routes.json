@@ -1,0 +1,13 @@
+{
+  "routes": [
+    "/admin-profile",
+    "/admin/horarios",
+    "/admin/usuarios",
+    "/doctor-profile",
+    "/home",
+    "/login",
+    "/patient-profile",
+    "/patient/horarios",
+    "/register"
+  ]
+}
