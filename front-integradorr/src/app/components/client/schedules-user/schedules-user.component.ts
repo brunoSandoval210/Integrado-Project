@@ -8,13 +8,24 @@ import { AuthService } from '../../../services/auth.service';
 import { AppointmentService } from '../../../services/appointment.service';
 import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { UserService } from '../../../services/user.service';
+import { FormsModule } from '@angular/forms';
+import { PopupComponent } from '../../utils/popup/popup.component';
+import { AppointmentPayComponent } from './appointment-pay/appointment-pay.component';
+import { AppointmentResumeComponent } from './appointment-resume/appointment-resume.component';
 
 @Component({
   selector: 'app-schedules-user',
   standalone: true,
   imports: [
     TableComponent,
-    PaginationComponent
+    PaginationComponent,
+    CommonModule,
+    FormsModule,
+    PopupComponent,
+    AppointmentPayComponent,
+    AppointmentResumeComponent,
   ],
   templateUrl: './schedules-user.component.html',
   styleUrls: ['./schedules-user.component.scss']
@@ -27,10 +38,13 @@ export class SchedulesUserComponent implements OnInit, OnDestroy {
   isModalOpen: boolean = false;
   isEditMode: boolean = false;
   selectedSchedule: any = null;
+
+  usersFilter: any[] = [];
+
   currentDateTime: Date = new Date();
+
   formattedDate: string = '';
   private subscriptions: Subscription = new Subscription();
-
 
   filters: ScheduleFilter;
 
@@ -42,8 +56,7 @@ export class SchedulesUserComponent implements OnInit, OnDestroy {
   constructor(
     private scheduleService: ScheduleService,
     private sharingDataService: SharingDataService,
-    private authService: AuthService,
-    private appointmentService: AppointmentService
+    private userService: UserService
   ) {
     this.formattedDate = this.formatDate(this.currentDateTime);
     this.filters = {
@@ -89,11 +102,35 @@ export class SchedulesUserComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.sharingDataService.edit.subscribe(schedule => {
         this.selectedSchedule = schedule;
-        console.log('Selected schedule:', this.selectedSchedule);
-        this.createAppointment(this.selectedSchedule);
+        this.openModal(true, schedule);
       })
     );
+
+    this.sharingDataService.onScheduleUpdate.subscribe(() => {
+      this.onCreateSchedule();
+    });
+
+    this.sharingDataService.onScheduleCreated.subscribe(() => {
+      this.onCreateSchedulePay();
+    });
+
+
+    this.sharingDataService.changeEditMode.subscribe((editMode: boolean) => {
+      this.isEditMode = editMode;
+    });
+    this.getUsers();
   }
+
+  onCreateSchedule(): void {
+    this.closeModal();
+    this.getSchedules();
+  }
+
+  onCreateSchedulePay(): void {
+    this.closeModal();
+    this.getSchedules();
+  }
+
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
@@ -101,16 +138,17 @@ export class SchedulesUserComponent implements OnInit, OnDestroy {
 
   resetFilters(): void {
     this.filters = {
-      today: this.filters.today,
-      filterDay: this.filters.filterDay,
-      idUser: this.filters.idUser,
-      status: this.filters.status,
-      statusSchedule: this.filters.statusSchedule
+      today: this.formattedDate,
+      filterDay: undefined,
+      idUser: undefined,
+      status: 1,
+      statusSchedule: 'LIBRE'
     };
     this.filterPagination = {
-      page: this.currentPage - 1,
+      page: 0,
       size: this.pageSize
     };
+    this.currentPage = 1;
     this.getSchedules();
   }
 
@@ -124,10 +162,39 @@ export class SchedulesUserComponent implements OnInit, OnDestroy {
   
   getSchedules(): void {
     const filters = {...this.filters, ...this.filterPagination};
-    this.scheduleService.getSchedules(filters).subscribe((response: any) => {
-      this.schedules = response.content;
-      this.totalItems = response.totalElements;
-    });
+    this.scheduleService.getSchedules(filters).subscribe(
+      (response: any) => {
+        this.schedules = response.content;
+        this.totalItems = response.totalElements;
+      },
+      error => {
+        console.error('Error fetching schedules', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Hubo un error al obtener los horarios.'
+        });
+      }
+    );
+  }
+
+  getUsers(): void {
+    const filters = {
+      roleId: 3
+    };
+    this.userService.getUsers(filters).subscribe(
+      data => {
+        this.usersFilter = data.content;
+      },
+      error => {
+        console.error('Error fetching users', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Hubo un error al obtener los usuarios.'
+        });
+      }
+    );
   }
 
   getCurrentDateTime(): void {
@@ -146,29 +213,15 @@ export class SchedulesUserComponent implements OnInit, OnDestroy {
     return `${schedule.hourStart} - ${schedule.hourEnd}`;
   }
 
-  createAppointment(selectedSchedule: any): void {
-    const appointment = {
-      statusAppointment: 'CONFIRMADA',
-      userId: this.authService.getUserId(),
-      scheduleId: selectedSchedule.id
-    };
-    this.appointmentService.createAppointment(appointment).subscribe(
-      response => {
-        console.log('Appointment created successfully', response);
-        Swal.fire({
-          icon: 'success',
-          title: 'Cita creada',
-          text: 'La cita ha sido creada exitosamente.'
-        });
-      },
-      error => {
-        console.error('Error creating appointment', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Hubo un error al crear la cita.'
-        });
-      }
-    );
+  openModal(editMode: boolean = false, schedule: any = null): void {
+    this.isEditMode = editMode;
+    this.selectedSchedule = schedule;
+    this.sharingDataService.onOpenCloseModal.emit(true);
+  }
+  
+  closeModal(): void {
+    this.sharingDataService.onOpenCloseModal.emit(false);
+    this.isEditMode = false;
+    this.selectedSchedule = null;
   }
 }

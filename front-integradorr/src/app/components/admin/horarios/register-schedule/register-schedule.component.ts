@@ -34,6 +34,12 @@ export class RegisterScheduleComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsers();
+
+    this.sharingDataService.onOpenCloseModal.subscribe((isOpen:boolean)=>{
+      if(isOpen){
+        this.scheduleForm.reset();
+      }
+    })
   }
 
   getUsers(): void {
@@ -55,11 +61,13 @@ export class RegisterScheduleComponent implements OnInit {
   onSubmit(): void {
     if (this.scheduleForm.valid) {
       const formData = { ...this.scheduleForm.value };
-      console.log('Form data before sending:', formData); // Agrega esta línea para depurar
+      // console.log('Form data before sending:', formData); // Agrega esta línea para depurar
       this.scheduleService.createSchedule(formData).subscribe(
         response => {
-          console.log('Schedule created successfully', response);
+          // console.log('Schedule created successfully', response);
+          this.sharingDataService.onScheduleCreated.emit();
           this.scheduleForm.reset();
+          this.sharingDataService.onOpenCloseModal.emit(false);
           Swal.fire({
             icon: 'success',
             title: 'Horario creado',

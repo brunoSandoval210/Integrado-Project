@@ -1,0 +1,19 @@
+<div class="modal-body">
+  <h5>Datos de la cita</h5>
+  <p><strong>Doctor:</strong> {{ schedule?.doctorName }}</p>
+  <p><strong>Especialidad:</strong> {{ schedule?.specialty }}</p>
+  <p><strong>Fecha:</strong> {{ schedule?.date }}</p>
+  <p><strong>Hora:</strong> {{ schedule?.hourStart }} - {{ schedule?.hourEnd }}</p>
+  <hr>
+  <h5>Datos del Paciente</h5>
+  <p><strong>Nombre y Apellidos:</strong> {{ patient?.name }} {{ patient?.lastname }}</p>
+  <p><strong>DNI:</strong> {{ patient?.dni }}</p>
+  <p><strong>Correo:</strong> {{ patient?.email }}</p>
+  <hr>
+  <h5>Costos</h5>
+  <p><strong>Total:</strong> {{cost}}</p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="pay()">Pagar</button>
+  <button type="button" class="btn btn-secondary" (click)="payInPerson()">Pagar Presencial</button>
+</div>

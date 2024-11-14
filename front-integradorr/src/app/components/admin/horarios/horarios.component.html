@@ -12,13 +12,13 @@
       <div class="col-md-3">
         <div class="form-group">
           <label for="filterDay">Fecha</label>
-          <input type="date" id="filterDay" class="form-control" [(ngModel)]="filters.filterDay">
+          <input type="date" id="filterDay" class="form-control" [(ngModel)]="filtersSchedule.filterDay">
         </div>
       </div>
       <div class="col-md-3">
         <div class="form-group">
           <label for="idUser">Doctor</label>
-          <select id="idUser" class="form-control" [(ngModel)]="filters.idUser">
+          <select id="idUser" class="form-control" [(ngModel)]="filtersSchedule.idUser">
             <option [ngValue]="undefined">Seleccione un usuario</option>
             <option *ngFor="let user of usersFilter" [value]="user.id">
               {{ user.name + ' ' + user.lastname + ' - ' + user.specialization.name }}
@@ -29,7 +29,7 @@
       <div class="col-md-3">
         <div class="form-group">
           <label for="statusSchedule">Estado del Horario</label>
-          <select id="statusSchedule" class="form-control" [(ngModel)]="filters.statusSchedule">
+          <select id="statusSchedule" class="form-control" [(ngModel)]="filtersSchedule.statusSchedule">
             <option [ngValue]="undefined">Seleccione un estado</option>
             <option [ngValue]="'LIBRE'">LIBRE</option>
             <option [ngValue]="'RESERVADO'">RESERVADO</option>
@@ -39,7 +39,7 @@
       <div class="col-md-3">
         <div class="form-group">
           <label for="status">Estado</label>
-          <select id="status" class="form-control" [(ngModel)]="filters.status">
+          <select id="status" class="form-control" [(ngModel)]="filtersSchedule.status">
             <option [ngValue]="undefined">Todos</option>
             <option [ngValue]="1">Activos</option>
             <option [ngValue]="0">Eliminado</option>

@@ -97,7 +97,6 @@ export class EditUserComponent implements OnInit, OnChanges {
       console.log('Form data before sending:', formData); // Agrega esta línea para depurar
       this.userService.updateUser(this.user.id, formData).subscribe(
         response => {
-          console.log('User updated successfully', response);
           this.sharingDataService.onScheduleUpdate.emit();
           this.userForm.reset();
           Swal.fire({

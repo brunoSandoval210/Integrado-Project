@@ -23,6 +23,8 @@ export class SharingDataService {
   //Evento para manejar la eliminacion
   private _delete = new EventEmitter<any>();
 
+  private _changeEditMode = new EventEmitter<boolean>();
+
   get onToggleSideNav(): EventEmitter<SideNavToggle> {
     return this._onToggleSideNav;
   }
@@ -53,5 +55,9 @@ export class SharingDataService {
 
   get delete(): EventEmitter<any> {
     return this._delete;
+  }
+
+  get changeEditMode(): EventEmitter<boolean> {
+    return this._changeEditMode;
   }
 }

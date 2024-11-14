@@ -73,7 +73,7 @@ export class UsuariosComponent implements OnInit{
       this.getUsers();
     });
     this.sharingDataService.onScheduleCreated.subscribe(() => {
-      this.getUsers();
+      this.onUserCreated();
     });
     this.sharingDataService.onScheduleUpdate.subscribe(() => {
       this.onUserUpdated();
@@ -125,7 +125,6 @@ export class UsuariosComponent implements OnInit{
       data => {
         this.users = data.content;
         this.totalItems = data.totalElements;
-        console.log('Users', this.users);
       },
       error => {
         console.error('Error fetching users', error);
@@ -138,8 +137,8 @@ export class UsuariosComponent implements OnInit{
     this.getUsers();
     Swal.fire({
       icon: 'success',
-      title: 'Horario creado',
-      text: 'El horario ha sido creado exitosamente.'
+      title: 'Usuario creado',
+      text: 'El usuario ha sido creado exitosamente.'
     });
   }
   
@@ -148,8 +147,8 @@ export class UsuariosComponent implements OnInit{
     this.getUsers();
     Swal.fire({
       icon: 'success',
-      title: 'Horario actualizado',
-      text: 'El horario ha sido actualizado exitosamente.'
+      title: 'Usuario actualizado',
+      text: 'El usuario ha sido actualizado exitosamente.'
     });
   }
 

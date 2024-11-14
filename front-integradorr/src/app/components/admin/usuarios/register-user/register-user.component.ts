@@ -67,7 +67,7 @@ export class RegisterUserComponent implements OnInit {
     if (this.userForm.valid) {
       this.userService.createUser(this.userForm.value).subscribe(
         response => {
-          console.log('User created successfully', response);
+          // console.log('User created successfully', response);
           this.sharingDataService.onScheduleCreated.emit();
           this.userForm.reset(); // Limpiar el formulario
           this.sharingDataService.onOpenCloseModal.emit(false); // Cerrar el modal

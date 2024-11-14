@@ -1,11 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SharingDataService } from '../../../services/sharing-data.service';
 import { CeilPipe } from '../celi/ceil.pipe';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-pagination',
   standalone: true,
-  imports: [CeilPipe],
+  imports: [
+    CeilPipe,
+    CommonModule
+  ],
   templateUrl: './pagination.component.html',
   styleUrl: './pagination.component.scss'
 })

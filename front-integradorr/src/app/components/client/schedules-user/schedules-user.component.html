@@ -1,6 +1,55 @@
-<p>schedules-user works!</p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="display-4 text-center">
+                <i class="fas fa-calendar-alt"></i> Horarios disponibles
+            </h1>
+        </div>
+    </div>
+    <div class="filters container mt-4">
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="filterDay">Fecha</label>
+                    <input type="date" id="filterDay" class="form-control" [(ngModel)]="filters.filterDay">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="idUser">Doctor</label>
+                    <select id="idUser" class="form-control" [(ngModel)]="filters.idUser">
+                        <option [ngValue]="undefined">Seleccione un usuario</option>
+                        <option *ngFor="let user of usersFilter" [value]="user.id">
+                            {{ user.name + ' ' + user.lastname + ' - ' + user.specialization.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-3 d-flex align-items-end">
+                <button class="btn btn-secondary w-100" (click)="getSchedules()">
+                    Aplicar Filtros
+                </button>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button class="btn btn-danger w-100" (click)="resetFilters()">
+                    Limpiar Filtros
+                </button>
+            </div>
+        </div>
+        
 
-<app-table [data]="schedules" [columns]="columns" [pageSize]="pageSize"></app-table>
+        <app-table [data]="schedules" [columns]="columns" [pageSize]="pageSize"></app-table>
 
-<app-pagination [totalItems]="totalItems" [currentPage]="currentPage" [pageSize]="pageSize">
-</app-pagination>
+        <app-pagination [totalItems]="totalItems" [currentPage]="currentPage" [pageSize]="pageSize">
+        </app-pagination>
+
+        <app-popup [title]="isEditMode ? 'Resumen cita' : 'Pagar Cita'">
+            @if(isEditMode) {
+            <app-appointment-resume [schedule]="selectedSchedule"></app-appointment-resume>
+            } @else {
+            <app-appointment-pay [schedule]="selectedSchedule"></app-appointment-pay>
+            }
+          </app-popup>
+    </div>
