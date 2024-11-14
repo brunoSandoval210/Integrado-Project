@@ -122,17 +122,19 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new IllegalArgumentException("El usuario no es un doctor");
         }
         if (user.getStatus() == 1 && user.getSpecialization() != null) {
-            if (scheduleRepository.existsByDateAndHourStartAndHourEndAndUser_Id(
+            if (scheduleRepository.existsByDateAndHourStartAndHourEndAndUser_IdAndStatusSchedule(
                     scheduleUpdateRequest.getDate(),
                     scheduleUpdateRequest.getHourStart(),
                     scheduleUpdateRequest.getHourEnd(),
-                    scheduleUpdateRequest.getDoctorId()
+                    scheduleUpdateRequest.getDoctorId(),
+                    scheduleUpdateRequest.getStatusSchedule()
             )) {
                 throw new IllegalArgumentException("Ya existe un horario con la misma fecha y hora");
             }
-            if (scheduleRepository.existsOverlappingSchedule(
+            if (scheduleRepository.existsOverlappingSchedule2(
                     scheduleUpdateRequest.getDoctorId(),
                     scheduleUpdateRequest.getDate(),
+                    scheduleUpdateRequest.getStatusSchedule(),
                     scheduleUpdateRequest.getHourStart(),
                     scheduleUpdateRequest.getHourEnd()
             )) {
