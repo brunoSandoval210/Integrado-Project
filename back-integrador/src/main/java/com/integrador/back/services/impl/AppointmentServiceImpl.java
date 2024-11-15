@@ -14,6 +14,8 @@ import com.integrador.back.repositories.RescheduleRepository;
 import com.integrador.back.repositories.ScheduleRepository;
 import com.integrador.back.repositories.UserRepository;
 import com.integrador.back.services.AppointmentService;
+import com.integrador.back.services.EmailService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +39,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
     private final RescheduleRepository rescheduleRepository;
+    private final EmailService emailService;
 
     @Transactional(readOnly = true)
     @Override
@@ -63,7 +69,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Transactional
     @Override
-    public Optional<AppointmentResponse> saveAppointment(AppointmentCreateRequest appointmentCreateRequest) {
+    public Optional<AppointmentResponse> saveAppointment(AppointmentCreateRequest appointmentCreateRequest) throws IOException,MessagingException {
         if (appointmentCreateRequest == null){
             throw new IllegalArgumentException("La cita no puede ser nula");
         }
@@ -76,6 +82,18 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointment.getSchedule().setStatusSchedule("RESERVADO");
         appointment.setStatus(1);
         appointment = appointmentRepository.save(appointment);
+        String appointmentDate=appointment.getSchedule().getDate().toString();
+        String appointmentTime=appointment.getSchedule().getHourStart().toString()+ " - "+appointment.getSchedule().getHourEnd().toString();
+        String specialistName=appointment.getSchedule().getUser().getName()+" "+appointment.getSchedule().getUser().getLastname()+" "+appointment.getSchedule().getUser().getSpecialization().getName();
+
+
+        String content=stringHtml("src/main/resources/templates/ConfirmacionEmail.html")
+                .replace("{appointmentDate}",appointmentDate)
+                .replace("{appointmentTime}",appointmentTime)
+                .replace("{specialistName}",specialistName);
+
+        emailService.sendMail(appointment.getUser().getEmail(),"Confirmacion cita",content);
+
         AppointmentResponse appointmentResponse = modelMapper.map(appointment, AppointmentResponse.class);
         UserFilter userResponse = modelMapper.map(appointment.getUser(), UserFilter.class);
         userResponse.setLastNameAndLastname(appointment.getUser().getName() + " " + appointment.getUser().getLastname());
@@ -150,5 +168,16 @@ public class AppointmentServiceImpl implements AppointmentService {
         reschedulesResponse.add(rescheduleResponse);
         appointmentResponse.setReschedules(reschedulesResponse);
         return Optional.of(appointmentResponse);
+    }
+
+    private static String stringHtml(String ruta) throws IOException {
+        StringBuilder builder = new StringBuilder();
+        BufferedReader in = new BufferedReader(
+                new FileReader(ruta));
+
+        in.lines().forEach(line -> builder.append(line));
+        in.close();
+
+        return builder.toString();
     }
 }

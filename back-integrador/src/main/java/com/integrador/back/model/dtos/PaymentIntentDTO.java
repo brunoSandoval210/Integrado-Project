@@ -2,7 +2,7 @@ package com.integrador.back.model.dtos;
 
 public class PaymentIntentDTO {
     public enum Currency{
-        usd, eur;
+        usd, eur, pen;
     }
 
     private String description;
