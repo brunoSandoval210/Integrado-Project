@@ -12,6 +12,7 @@
             <input type="password" class="form-control" id="password" [(ngModel)]="password" name="password" required>
           </div>
           <button type="submit" class="btn btn-primary">Login</button>
+          <p>¿Se olvido la contraseña? Dale click <a [routerLink]="['/recover-passwird-send-email']" routerLinkActive="router-link-active" >Aqui</a></p>
         </form>
       </div>
     </div>

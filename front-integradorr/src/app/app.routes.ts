@@ -12,6 +12,8 @@ import { AdminGuard } from './guards/admin.guard';
 import { HorariosComponent } from './components/admin/horarios/horarios.component';
 import { UsuariosComponent } from './components/admin/usuarios/usuarios.component';
 import { SchedulesUserComponent } from './components/client/schedules-user/schedules-user.component';
+import { PasswordRecoveryComponent } from './components/auth/password-recovery/password-recovery.component';
+import { PasswordRecoverybyemailComponent } from './components/auth/password-recoverybyemail/password-recoverybyemail.component';
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
@@ -25,8 +27,12 @@ export const routes: Routes = [
   { path: 'admin-profile', component: AdminProfileComponent, canActivate: [AdminGuard] },
   { path: 'admin/horarios', component:HorariosComponent, canActivate: [AdminGuard]},
   { path: 'admin/usuarios', component:UsuariosComponent, canActivate: [AdminGuard]},
+
+
   { path: 'login', component:LoginComponent},
-  { path: 'register', component:RegisterComponent}
+  { path: 'register', component:RegisterComponent},
+  { path: 'recover-password', component:PasswordRecoveryComponent },
+  { path: 'recover-passwird-send-email', component:PasswordRecoverybyemailComponent },
 ];
 
 // @NgModule({

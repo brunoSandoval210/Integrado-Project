@@ -9,6 +9,7 @@ export class AuthService {
   private userSubject = new BehaviorSubject<any>(null); // Subject para notificar cambios
   user$ = this.userSubject.asObservable(); // Observable para que otros componentes se suscriban
 
+  private url1: string = "http://localhost:8080/auth";
   private url: string = "http://localhost:8080/auth/login";
   private userUrl: string = "http://localhost:8080/user/email"; // URL para obtener el usuario por correo electrónico
   private _token!: string | undefined;
@@ -23,6 +24,15 @@ export class AuthService {
 
   private isBrowser(): boolean {
     return typeof window !== 'undefined';
+  }
+
+  changePassword(password: string, validPassword: string, token: string, code: string): Observable<any> {
+    const body = { password, validPassword, token, code };
+    return this.http.post<any>(`${this.url1}/cambiarContrasena`, body);
+  }
+
+  sendEmailForRecoveryPassword(email: string): Observable<any> {
+    return this.http.post<any>(`${this.url1}/recuperarContrasena/${email}`, {});
   }
 
   loginUser({ username, password }: any): Observable<any> {

@@ -1,13 +1,16 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [
+    FormsModule,
+    RouterModule
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -15,7 +18,10 @@ export class LoginComponent {
   username: string = '';
   password: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService, 
+    private router: Router
+  ) {}
   
   onSubmit() {
     this.authService.loginUser({ username: this.username, password: this.password }).subscribe(
