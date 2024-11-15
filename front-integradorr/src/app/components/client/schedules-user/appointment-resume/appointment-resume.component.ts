@@ -31,6 +31,7 @@ export class AppointmentResumeComponent implements OnInit {
 
   pay(): void {
    this.sharingDataService.changeEditMode.emit(false);
+   
   }
 
   payInPerson(): void {

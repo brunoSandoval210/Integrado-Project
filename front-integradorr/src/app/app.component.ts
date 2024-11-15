@@ -10,7 +10,14 @@ import { BodyComponent } from './components/layout/body/body.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,RouterModule,NavbarComponent,FooterComponent,SliderComponent,BodyComponent],
+  imports: [
+    RouterOutlet,
+    RouterModule,
+    NavbarComponent,
+    FooterComponent,
+    SliderComponent,
+    BodyComponent,
+  ],
   providers: [],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

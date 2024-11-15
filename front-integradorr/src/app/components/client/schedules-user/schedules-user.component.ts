@@ -107,7 +107,7 @@ export class SchedulesUserComponent implements OnInit, OnDestroy {
     );
 
     this.sharingDataService.onScheduleUpdate.subscribe(() => {
-      this.onCreateSchedule();
+      this.onCreateSchedulePay();
     });
 
     this.sharingDataService.onScheduleCreated.subscribe(() => {
@@ -119,11 +119,6 @@ export class SchedulesUserComponent implements OnInit, OnDestroy {
       this.isEditMode = editMode;
     });
     this.getUsers();
-  }
-
-  onCreateSchedule(): void {
-    this.closeModal();
-    this.getSchedules();
   }
 
   onCreateSchedulePay(): void {
@@ -216,6 +211,7 @@ export class SchedulesUserComponent implements OnInit, OnDestroy {
   openModal(editMode: boolean = false, schedule: any = null): void {
     this.isEditMode = editMode;
     this.selectedSchedule = schedule;
+    console.log('Selected schedule', this.selectedSchedule);
     this.sharingDataService.onOpenCloseModal.emit(true);
   }
   
