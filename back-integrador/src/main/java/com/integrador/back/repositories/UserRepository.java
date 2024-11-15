@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -40,4 +41,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
     boolean existsByDni(String dni);
 
     boolean existsByNameAndLastnameAndEmailAndDni(String name, String lastname, String email, String dni);
+
+    @Modifying
+    @Query("UPDATE User u SET u.password = :password WHERE u.id = :userId")
+    @Transactional
+    void updatePassword(String password, Long userId);
 }
