@@ -14,6 +14,7 @@ import com.integrador.back.services.EmailService;
 import com.integrador.back.validation.PasswordValid;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -71,22 +72,24 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     @Override
-    public Map<String, String> cambiarContrasena(PasswordUpdateRquest passwordUpdate) {
+    public ResponseEntity<?> cambiarContrasena(PasswordUpdateRquest passwordUpdate) {
         String email = jwtService.getUsernameFromToken(passwordUpdate.getToken());
         Optional<User> userUpdatePassword = userRepository.findByEmail(email);
         HistoryRecuperation codeData = historyRecuperationRepository.findByCode(passwordUpdate.getCode());
 
         Map<String, String> response = new HashMap<>();
-        if (codeData.getCode().equals(passwordUpdate.getCode())) {
-            passwordValid.isValidPassword(
-                    passwordUpdate.getPassword(), passwordUpdate.getValidPassword(), email);
-            userRepository.updatePassword(
-                    passwordEncoder.encode(passwordUpdate.getPassword()), userUpdatePassword.get().getId());
-            response.put("message", "Se ha actualizado la contraseña");
-        } else {
+        if (codeData == null || !codeData.getCode().equals(passwordUpdate.getCode())) {
             response.put("message", "El código no es correcto");
+            return ResponseEntity.status(400).body(response);
         }
-        return response;
+
+        passwordValid.isValidPassword(
+                passwordUpdate.getPassword(), passwordUpdate.getValidPassword(), email);
+        userRepository.updatePassword(
+                passwordEncoder.encode(passwordUpdate.getPassword()), userUpdatePassword.get().getId());
+        response.put("message", "Se ha actualizado la contraseña");
+
+        return ResponseEntity.ok(response);
     }
 
     @Transactional
