@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,8 @@ export class AuthService {
   private userSubject = new BehaviorSubject<any>(null); // Subject para notificar cambios
   user$ = this.userSubject.asObservable(); // Observable para que otros componentes se suscriban
 
-  private url1: string = "http://localhost:8080/auth";
-  private url: string = "http://localhost:8080/auth/login";
-  private userUrl: string = "http://localhost:8080/user/email"; // URL para obtener el usuario por correo electrónico
+  private url: string = `${environment.apiUrl}/auth`;
+  private userUrl: string = `${environment.apiUrl}/user/email`; // URL para obtener el usuario por correo electrónico
   private _token!: string | undefined;
   private _user: any = {
     role: '',
@@ -28,15 +28,15 @@ export class AuthService {
 
   changePassword(password: string, validPassword: string, token: string, code: string): Observable<any> {
     const body = { password, validPassword, token, code };
-    return this.http.post<any>(`${this.url1}/cambiarContrasena`, body);
+    return this.http.post<any>(`${this.url}/cambiarContrasena`, body);
   }
 
   sendEmailForRecoveryPassword(email: string): Observable<any> {
-    return this.http.post<any>(`${this.url1}/recuperarContrasena/${email}`, {});
+    return this.http.post<any>(`${this.url}/recuperarContrasena/${email}`, {});
   }
 
   loginUser({ username, password }: any): Observable<any> {
-    return this.http.post<any>(this.url, { username, password });
+    return this.http.post<any>(`${this.url}/login`, { username, password });
   }
 
   getByEmail(email: string): Observable<any> {

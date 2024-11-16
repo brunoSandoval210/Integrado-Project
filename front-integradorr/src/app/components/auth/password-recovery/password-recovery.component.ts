@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 
 
 @Component({
   selector: 'app-password-recovery',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,CommonModule],
   templateUrl: './password-recovery.component.html',
   styleUrl: './password-recovery.component.scss'
 })
@@ -28,11 +28,17 @@ export class PasswordRecoveryComponent implements OnInit {
 
   ) {
     this.changePasswordForm = this.fb.group({
-      password: ['', [Validators.required, Validators.minLength(8), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).*$')]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)]],
       validPassword: ['', [Validators.required]],
       token: ['', [Validators.required]],
-      code: ['', [Validators.required]]
-    });
+      code: ['', [Validators.required, Validators.minLength(5)]] 
+    }, { validators: this.passwordsMatchValidator });
+  }
+
+  passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
+    const password = group.get('password')?.value;
+    const validPassword = group.get('validPassword')?.value;
+    return password === validPassword ? null : { passwordsMismatch: true };
   }
 
   ngOnInit(): void {
@@ -73,12 +79,11 @@ export class PasswordRecoveryComponent implements OnInit {
       error: (err) => {
         console.error('Error changing password:', err);
         Swal.fire('Error', err.error?.message || 'No se pudo cambiar la contraseña.', 'error');
+        this.isLoading = false;
       },
       complete: () => {
         this.isLoading = false;
       }
     });
   }
-  
-  
 }

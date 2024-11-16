@@ -47,6 +47,8 @@ export class PasswordRecoverybyemailComponent {
       error: (err) => {
         console.error('Error sending recovery email:', err);
         Swal.fire('Error', err.error?.message || 'No se pudo enviar el correo electrónico.', 'error');
+        this.isLoading = false;
+
       },
       complete: () => {
         this.isLoading = false;

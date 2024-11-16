@@ -1,12 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppointmentService {
-  private url: string = "http://localhost:8080/appointments";
+  private url: string = `${environment.apiUrl}/appointments`; // Usar la URL del entorno
 
   constructor(
     private http: HttpClient,
