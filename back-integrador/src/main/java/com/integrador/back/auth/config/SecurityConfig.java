@@ -16,6 +16,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 
 @Configuration
@@ -52,7 +53,10 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration config=new CorsConfiguration();
         config.setAllowedOriginPatterns(Arrays.asList("*"));
-        config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        config.setAllowedOrigins(Arrays.asList(
+                "http://localhost:4200",
+                "https://integrador-jet-seven.vercel.app"
+        ));
         config.setAllowedMethods(Arrays.asList("POST","GET","PUT","DELETE"));
         config.setAllowedHeaders(Arrays.asList("Authorization","Content-Type"));
         config.setAllowCredentials(true);

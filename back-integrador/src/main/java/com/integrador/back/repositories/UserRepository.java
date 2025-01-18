@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -24,8 +25,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     Optional<User> findByEmail(String email);
 
-    //Busca un usuario por su DNI
-    Optional<User> findByDni(String dni);
+    @Query("select u from User u where u.dni like :dni% and u.status=1 and u.role.id=2")
+    List<User> findByDni(@Param("dni") String dni);
 
     @Modifying
     @Query(value = "UPDATE usuario "
@@ -46,4 +47,5 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("UPDATE User u SET u.password = :password WHERE u.id = :userId")
     @Transactional
     void updatePassword(String password, Long userId);
+
 }

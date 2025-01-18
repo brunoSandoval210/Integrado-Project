@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,4 +69,20 @@ public class AppointmentController {
             return ResponseEntity.internalServerError().body("Error inesperado: " + e.getMessage());
         }
     }
+
+    @GetMapping("/AppointmentsForDay")
+    public ResponseEntity<?> getAppointmentsWithDoctor(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) Long idUser,
+            @RequestParam(required = false) LocalDate date
+    ) {
+        Pageable pageable = Pageable.ofSize(size).withPage(page);
+        try{
+            return ResponseEntity.ok(appointmentService.findByScheduleUserIdAndDate( idUser, date, pageable));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error inesperado: " + e.getMessage());
+        }
+    }
+
 }

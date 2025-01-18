@@ -21,8 +21,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     private static final Logger logger = LoggerFactory.getLogger(PaymentServiceImpl.class);
 
-//    @Value("${stripe.key.secret}")
-    private String secretKey="sk_test_51QKs8ELXEFPikSfqo3LEMvm1ImAiBRkOcbLVyjTd14qiS1wHTtyOw8JyZvEtdo0MTjvhMW30uAjEswApSB5GFm9O00HcLdI9Jh";
+    @Value("${stripe.key.secret}")
+    private String secretKey;
 
     @Transactional
     @Override

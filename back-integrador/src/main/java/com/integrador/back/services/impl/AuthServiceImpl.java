@@ -14,6 +14,7 @@ import com.integrador.back.services.EmailService;
 import com.integrador.back.validation.PasswordValid;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,12 +23,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,12 +49,12 @@ public class AuthServiceImpl implements AuthService {
         passwordValid.validUser(email);
         Optional<User> user = userRepository.findByEmail(email);
         String code = randomCodeGenerator.generateRandomCode(5);
-        String token = jwtService.getToken(user.get());
 
         StringBuilder direccionRecuperar = new StringBuilder()
-                .append("http://localhost:4200/recover-password?token=")
-                .append(token);
-        String content = stringHtml("src/main/resources/templates/EmailRecuperacion.html")
+                .append("http://integrador2-app.s3-website.us-east-2.amazonaws.com/recover-password");
+//                .append("http://localhost:4200/recover-password?token=")
+
+        String content = stringHtml("templates/EmailRecuperacion.html")
                 .replace("/url/", direccionRecuperar.toString())
                 .replace("{code}", code);
 
@@ -73,9 +73,8 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     @Override
     public ResponseEntity<?> cambiarContrasena(PasswordUpdateRquest passwordUpdate) {
-        String email = jwtService.getUsernameFromToken(passwordUpdate.getToken());
-        Optional<User> userUpdatePassword = userRepository.findByEmail(email);
         HistoryRecuperation codeData = historyRecuperationRepository.findByCode(passwordUpdate.getCode());
+        Optional<User> userUpdatePassword = userRepository.findByEmail(codeData.getUser().getEmail());
 
         Map<String, String> response = new HashMap<>();
         if (codeData == null || !codeData.getCode().equals(passwordUpdate.getCode())) {
@@ -84,7 +83,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         passwordValid.isValidPassword(
-                passwordUpdate.getPassword(), passwordUpdate.getValidPassword(), email);
+                passwordUpdate.getPassword(), passwordUpdate.getValidPassword(), codeData.getUser().getEmail());
         userRepository.updatePassword(
                 passwordEncoder.encode(passwordUpdate.getPassword()), userUpdatePassword.get().getId());
         response.put("message", "Se ha actualizado la contraseña");
@@ -105,14 +104,13 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
-    private static String stringHtml(String ruta) throws IOException {
-        StringBuilder builder = new StringBuilder();
-        BufferedReader in = new BufferedReader(
-                new FileReader(ruta));
 
-        in.lines().forEach(line -> builder.append(line));
-        in.close();
-
-        return builder.toString();
+    //Para el despliegue
+    private static String stringHtml(String resourcePath) throws IOException {
+        ClassPathResource resource = new ClassPathResource(resourcePath);
+        try (InputStream inputStream = resource.getInputStream();
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            return reader.lines().collect(Collectors.joining(System.lineSeparator()));
+        }
     }
 }

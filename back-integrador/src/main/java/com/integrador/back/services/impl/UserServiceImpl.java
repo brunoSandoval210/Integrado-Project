@@ -1,5 +1,6 @@
 package com.integrador.back.services.impl;
 
+import com.integrador.back.model.dtos.SpecializationResponse;
 import com.integrador.back.model.dtos.user.*;
 import com.integrador.back.model.entities.Specialization;
 import com.integrador.back.model.entities.User;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -191,8 +194,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<List<Specialization>> getAllSpecializations(Integer status) {
-        return Optional.of(specializationRepository.findAllByStatus(status));
+    public Optional<List<SpecializationResponse>> getAllSpecializations(Integer status) {
+        List<Specialization> specialization = specializationRepository.findAllByStatus(status);
+
+
+        return Optional.of(specialization.stream()
+                .map(specialization1 -> modelMapper.map(specialization1, SpecializationResponse.class))
+                .collect(Collectors.toList()));
     }
 
     @Transactional(readOnly = true)
@@ -210,6 +218,27 @@ public class UserServiceImpl implements UserService {
         }
 
         return userResponse;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public ResponseEntity<List<UserFilter>> getUserFilterByDni(String dni) {
+        List<User> users = userRepository.findByDni(dni);
+
+        if (users.size() > 30) {
+            throw new IllegalArgumentException("La busqueda es muy amplia, por favor sea mas especifico");
+        }
+        if (users.size() == 0) {
+            throw new IllegalArgumentException("No se encontraron resultados");
+        }
+        List<UserFilter> userFilter = users.stream()
+                .map(user -> {
+                    UserFilter userFilter1 = modelMapper.map(user, UserFilter.class);
+                    userFilter1.setName(user.getDni() + " " + user.getName() + " " + user.getLastname());
+                    return userFilter1;
+                })
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(userFilter, HttpStatus.OK);
     }
 
     private List<AppointmentResponse> mapAppointments(User user) {

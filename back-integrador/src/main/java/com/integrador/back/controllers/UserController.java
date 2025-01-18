@@ -1,6 +1,8 @@
 package com.integrador.back.controllers;
 
+import com.integrador.back.model.dtos.SpecializationResponse;
 import com.integrador.back.model.dtos.user.UserCreateRequest;
+import com.integrador.back.model.dtos.user.UserFilter;
 import com.integrador.back.model.dtos.user.UserResponse;
 import com.integrador.back.model.dtos.user.UserUpdateRequest;
 import com.integrador.back.model.entities.Specialization;
@@ -99,7 +101,7 @@ public class UserController {
     @GetMapping("/especializaciones")
     public ResponseEntity<?> getSpecializations(){
         try {
-            Optional<List<Specialization>> specializations = userService.getAllSpecializations(1);
+            Optional<List<SpecializationResponse>> specializations = userService.getAllSpecializations(1);
             return ResponseEntity.status(HttpStatus.OK).body(specializations);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado: " + e.getMessage());
@@ -115,6 +117,16 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/dni/{dni}")
+    private ResponseEntity<?> getUsersByDni(@PathVariable String dni) {
+        try {
+            ResponseEntity<List<UserFilter>> users = userService.getUserFilterByDni(dni);
+            return ResponseEntity.status(HttpStatus.OK).body(users);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }
