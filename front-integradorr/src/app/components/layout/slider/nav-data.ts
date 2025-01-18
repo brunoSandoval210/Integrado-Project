@@ -6,6 +6,12 @@ export const navbarData = [
         label: 'Doctor Profile',
         roles: ['ROLE_DOCTOR']
     },
+    {
+        routerLink: '/doctor/search-user',
+        icon: 'fa fa-search',
+        label: 'Buscar paciente',
+        roles: ['ROLE_DOCTOR']
+    },
     //*********Rutas para el cliente************
     {
         routerLink: '/patient-profile',
@@ -20,12 +26,12 @@ export const navbarData = [
         roles: ['ROLE_USER']
     },
     //*********Rutas para el admin************
-    {
-        routerLink: '/admin-profile',
-        icon: 'fa fa-tachometer-alt',
-        label: 'Admin Profile',
-        roles: ['ROLE_ADMIN']
-    },
+    // {
+    //     routerLink: '/admin-profile',
+    //     icon: 'fa fa-tachometer-alt',
+    //     label: 'Admin Profile',
+    //     roles: ['ROLE_ADMIN']
+    // },
     {
         routerLink: '/admin/usuarios',
         icon: 'fa fa-users',

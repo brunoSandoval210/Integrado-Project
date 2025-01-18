@@ -1,1 +1,48 @@
-<p>patient-profile works!</p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="display-4 text-center">
+                <i class="fa fa-calendar-check"></i> Mis citas
+            </h1>
+        </div>
+    </div>
+    <div class="filters container mt-4">
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="statusAppointment">Estado de la cita</label>
+                    <select id="statusAppointment" class="form-control"
+                        [(ngModel)]="appointmentsFilter.statusAppointment">
+                        <option [ngValue]="undefined">Todos</option>
+                        <option value="CONFIRMADA_PAGADA">Confirmada pagada</option>
+                        <option value="CONFIRMADA_SIN_PAGAR">confirmada sin pagar</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-3 d-flex align-items-end">
+                <button class="btn btn-secondary w-100" (click)="getAppointments()">
+                    Aplicar Filtros
+                </button>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button class="btn btn-danger w-100" (click)="resetFilters()">
+                    Limpiar Filtros
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-4">
+        <app-table [citaUser]="citaUser" [data]="appointments" [columns]="columns" [pageSize]="pageSize"></app-table>
+        <app-pagination [totalItems]="totalItems" [currentPage]="currentPage" [pageSize]="pageSize"></app-pagination>
+    
+        <app-popup [title]="isEditMode? 'Cita medica': 'Reprogramar cita'">
+            @if(isEditMode) {
+             <app-show-diagnostic [appointment]="selectedAppointment"></app-show-diagnostic>
+            } @else{
+                <app-reprogramin-appointment [appointment]="selectedAppointment"></app-reprogramin-appointment>
+            }
+        </app-popup>
+    </div>
+</div>

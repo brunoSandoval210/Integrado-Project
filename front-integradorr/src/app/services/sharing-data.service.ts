@@ -23,6 +23,10 @@ export class SharingDataService {
   //Evento para manejar la eliminacion
   private _delete = new EventEmitter<any>();
 
+  private _showDiagnostic = new EventEmitter<any>();
+
+  private _reprogramingAppointments = new EventEmitter<any>();
+
   private _changeEditMode = new EventEmitter<boolean>();
 
   get onToggleSideNav(): EventEmitter<SideNavToggle> {
@@ -60,4 +64,13 @@ export class SharingDataService {
   get changeEditMode(): EventEmitter<boolean> {
     return this._changeEditMode;
   }
+
+  get showDiagnostic(): EventEmitter<any> {
+    return this._showDiagnostic;
+  }
+
+  get reprogramingAppointments(): EventEmitter<any> {
+    return this._reprogramingAppointments;
+  }
+
 }

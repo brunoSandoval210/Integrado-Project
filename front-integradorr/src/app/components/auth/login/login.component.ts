@@ -56,7 +56,7 @@ export class LoginComponent {
   redirectUser() {
     const role = this.authService.user.role;
     if (role === 'ROLE_ADMIN') {
-      this.router.navigate(['/admin-profile']);
+      this.router.navigate(['/admin/usuarios']);
     } else if (role === 'ROLE_DOCTOR') {
       this.router.navigate(['/doctor-profile']);
     } else if (role === 'ROLE_USER') {

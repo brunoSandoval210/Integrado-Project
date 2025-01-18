@@ -4,7 +4,7 @@
         <h2 class="text-center">Login</h2>
         <form (ngSubmit)="onSubmit()">
           <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
+            <label for="username" class="form-label">Email</label>
             <input type="text" class="form-control" id="username" [(ngModel)]="username" name="username" required>
           </div>
           <div class="mb-3">
@@ -12,7 +12,7 @@
             <input type="password" class="form-control" id="password" [(ngModel)]="password" name="password" required>
           </div>
           <button type="submit" class="btn btn-primary">Login</button>
-          <p>¿Se olvido la contraseña? Dale click <a [routerLink]="['/recover-passwird-send-email']" routerLinkActive="router-link-active" >Aqui</a></p>
+          <p>¿Se olvido la contraseña? Dale click <a [routerLink]="['/recover-password-send-email']" routerLinkActive="router-link-active" >Aqui</a></p>
         </form>
       </div>
     </div>

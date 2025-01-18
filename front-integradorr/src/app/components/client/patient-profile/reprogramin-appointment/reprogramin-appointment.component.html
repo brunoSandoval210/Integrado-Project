@@ -1,0 +1,23 @@
+<form [formGroup]="rescheduleForm" (ngSubmit)="rescheduleAppointment()">
+    <div class="form-group">
+      <label for="previousDate">Fecha Anterior</label>
+      <input type="date" id="previousDate" formControlName="previousDate" class="form-control" >
+    </div>
+    <div class="form-group">
+      <label for="newDate">Nueva Fecha</label>
+      <input type="date" id="newDate" formControlName="newDate" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="hourStart">Hora de Inicio</label>
+      <input type="time" id="hourStart" formControlName="hourStart" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="hourEnd">Hora de Fin</label>
+      <input type="time" id="hourEnd" formControlName="hourEnd" class="form-control">
+    </div>
+    <div class="form-group">
+      <label for="reason">Razón</label>
+      <textarea id="reason" formControlName="reason" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Reprogramar Cita</button>
+  </form>

@@ -38,8 +38,8 @@
                 </button>
             </div>
         </div>
-        
-
+    </div>
+    <div class="container mt-4">
         <app-table [data]="schedules" [columns]="columns" [pageSize]="pageSize"></app-table>
 
         <app-pagination [totalItems]="totalItems" [currentPage]="currentPage" [pageSize]="pageSize">
@@ -51,5 +51,6 @@
             } @else {
             <app-appointment-pay [schedule]="selectedSchedule"></app-appointment-pay>
             }
-          </app-popup>
+        </app-popup>
     </div>
+</div>

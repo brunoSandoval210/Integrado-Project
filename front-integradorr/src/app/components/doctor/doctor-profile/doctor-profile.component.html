@@ -1,1 +1,34 @@
-<p>doctor-profile works!</p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="display-4 text-center">
+                <i class="fas fa-calendar-day"></i> Citas del día
+            </h1>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <form (ngSubmit)="getAppointments()">
+                <div class="form-row align-items-end">
+                    <!-- Campo Fecha -->
+                    <div class="form-group col-md-4 mb-3">
+                        <label for="date">Fecha</label>
+                        <input type="date" id="date" class="form-control" [(ngModel)]="appointmentsFilter.date" name="date">
+                    </div>
+                    <!-- Botones -->
+                    <div class="form-group col-md-4 d-flex mt-md-0 mt-4">
+                        <button type="submit" class="btn btn-primary me-3">Filtrar</button>
+                        <button type="button" class="btn btn-secondary" (click)="resetFilters()">Resetear</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <app-table [data]="appointments" [columns]="columns" [pageSize]="pageSize"></app-table>
+
+        <app-pagination [totalItems]="totalItems" [currentPage]="currentPage" [pageSize]="pageSize">
+        </app-pagination>
+    </div>
+</div>

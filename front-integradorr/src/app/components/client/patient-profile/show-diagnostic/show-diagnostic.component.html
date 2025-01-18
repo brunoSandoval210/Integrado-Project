@@ -1,0 +1,57 @@
+<div class="container mt-4">
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <p><strong>ID Cita:</strong> {{ appointment?.id }}</p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Estado de la Cita:</strong> {{ appointment?.statusAppointment }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Hora de Inicio:</strong> {{ appointment?.schedule?.hourStart }}</p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Hora de Fin:</strong> {{ appointment?.schedule?.hourEnd }}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Doctor:</strong> {{ appointment?.schedule?.doctorName }}</p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Especialidad:</strong> {{ appointment?.schedule?.specialty }}</p>
+        </div>
+    </div>
+    <!-- Detalles Médicos -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <h5 class="text-secondary">Diagnostico</h5>
+            <ul class="list-group" *ngIf="appointment?.detailsMedicalHistory?.length > 0; else noDetails">
+                <li class="list-group-item" *ngFor="let detail of appointment.detailsMedicalHistory">
+                    {{ detail.detalle }}
+                </li>
+            </ul>
+            <ng-template #noDetails>
+                <p>No hay detalles médicos disponibles para esta cita.</p>
+            </ng-template>
+        </div>
+    </div>
+    <!-- Reprogramaciones -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <h5 class="text-secondary">Reprogramaciones</h5>
+            <ul class="list-group" *ngIf="appointment?.reschedules?.length > 0; else noReschedules">
+                <li class="list-group-item" *ngFor="let reschedule of appointment.reschedules">
+                    <strong>Fecha:</strong> {{ reschedule.newDate }} 
+                    <strong>Hora:</strong> {{ reschedule.hourStart }} - {{ reschedule.hourEnd }}
+                    <br>
+                    <strong>Motivo:</strong> {{ reschedule.reason }}
+                </li>
+            </ul>
+            <ng-template #noReschedules>
+                <p>No hay reprogramaciones para esta cita.</p>
+            </ng-template>
+        </div>
+    </div>
+</div>

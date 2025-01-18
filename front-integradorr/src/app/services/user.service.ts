@@ -61,4 +61,8 @@ export class UserService {
   getSpecializacionsDoctor(): Observable<any> {
     return this.http.get<any>(`${this.url}/especializaciones`,{ headers: this.getAuthHeaders() });
   }
+
+  getUsersFilterByDni(dni: any): Observable<any> {
+    return this.http.get<any>(`${this.url}/dni/${dni}`, { headers: this.getAuthHeaders() });
+  }
 }

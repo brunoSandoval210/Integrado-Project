@@ -33,9 +33,18 @@
                     <i class="fas fa-trash" (click)="onDelete(row)"></i>
                 </button>
                 } @else {
+                @if (citaUser== false) {
                 <button type="button" class="btn btn-primary btn-sm" (click)="onEdit(row)">
                     <i class="fas fa-calendar-plus"></i> Reservar
                 </button>
+                }@else{
+                    <button type="button" class="btn btn-danger  btn-sm me-2" (click)="onShowDiagnostico(row)">
+                        <i class="fas fa-stethoscope"></i> 
+                    </button>
+                    <button type="button" class="btn btn-warning btn-sm" (click)="onReprogramingAppointments(row)">
+                        <i class="fas fa-calendar-edit"></i>
+                    </button>
+                }
                 }
                 }
             </td>

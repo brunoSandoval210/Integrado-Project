@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
@@ -14,23 +14,18 @@ import { CommonModule, Location } from '@angular/common';
   templateUrl: './password-recovery.component.html',
   styleUrl: './password-recovery.component.scss'
 })
-export class PasswordRecoveryComponent implements OnInit {
+export class PasswordRecoveryComponent{
   changePasswordForm: FormGroup;
   isLoading: boolean = false;
-  token: string | null = null;
 
   constructor(
     private fb: FormBuilder, 
     private authService: AuthService,
-    private route: ActivatedRoute,
-    private routerDirect: Router,
-    private location: Location
-
+    private routerDirect: Router
   ) {
     this.changePasswordForm = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)]],
       validPassword: ['', [Validators.required]],
-      token: ['', [Validators.required]],
       code: ['', [Validators.required, Validators.minLength(5)]] 
     }, { validators: this.passwordsMatchValidator });
   }
@@ -42,12 +37,6 @@ export class PasswordRecoveryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.token = params['token'];
-      if (this.token) {
-        this.changePasswordForm.patchValue({ token: this.token });
-      }
-    });
   }
 
   onSubmit(): void {
@@ -56,7 +45,7 @@ export class PasswordRecoveryComponent implements OnInit {
       return;
     }
   
-    const { password, validPassword, token, code } = this.changePasswordForm.value;
+    const { password, validPassword, code } = this.changePasswordForm.value;
   
     if (password !== validPassword) {
       Swal.fire('Error', 'Las contraseñas no coinciden.', 'warning');
@@ -65,15 +54,15 @@ export class PasswordRecoveryComponent implements OnInit {
   
     this.isLoading = true;
   
-    this.authService.changePassword(password, validPassword, token, code).subscribe({
+    this.authService.changePassword(password, validPassword, code).subscribe({
       next: (response) => {
         Swal.fire({
           icon: 'success',
           title: 'Contraseña cambiada',
           text: 'La contraseña se cambió correctamente.'
         });
-        this.location.replaceState('/recover-password');
         this.routerDirect.navigate(['/login']);
+        // this.location.replaceState('/recover-password');
 
       },
       error: (err) => {

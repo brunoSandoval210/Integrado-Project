@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
+
 @Component({
   selector: 'app-admin-profile',
   standalone: true,
@@ -8,5 +9,5 @@ import { Component } from '@angular/core';
   styleUrl: './admin-profile.component.scss'
 })
 export class AdminProfileComponent {
-
+  
 }

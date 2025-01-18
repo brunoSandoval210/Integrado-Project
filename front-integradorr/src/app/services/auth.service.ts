@@ -26,8 +26,8 @@ export class AuthService {
     return typeof window !== 'undefined';
   }
 
-  changePassword(password: string, validPassword: string, token: string, code: string): Observable<any> {
-    const body = { password, validPassword, token, code };
+  changePassword(password: string, validPassword: string, code: string): Observable<any> {
+    const body = { password, validPassword, code };
     return this.http.post<any>(`${this.url}/cambiarContrasena`, body);
   }
 
